@@ -6,20 +6,20 @@ import (
 )
 
 type CommentParser interface {
-	Parse(string) []*soccerstream.Soccerstream
+	Parse(string) []*soccerstreams.Soccerstream
 }
 
 type PostParser interface {
-	Parse(*reddit.Post) *soccerstream.Matchthread
+	Parse(*reddit.Post) *soccerstreams.Matchthread
 }
 
-func ParseComment(c *reddit.Comment) []*soccerstream.Soccerstream {
+func ParseComment(c *reddit.Comment) []*soccerstreams.Soccerstream {
 	parsers := []CommentParser{
 		&singleStreamParser{},
 		&acestreamParser{},
 	}
 
-	var s []*soccerstream.Soccerstream
+	var s []*soccerstreams.Soccerstream
 
 	for _, parser := range parsers {
 		s = append(s, parser.Parse(c.Body)...)
@@ -34,7 +34,7 @@ func ParseComment(c *reddit.Comment) []*soccerstream.Soccerstream {
 	return s
 }
 
-func ParsePost(p *reddit.Post) *soccerstream.Matchthread {
+func ParsePost(p *reddit.Post) *soccerstreams.Matchthread {
 	var parser PostParser
 
 	return parser.Parse(p)

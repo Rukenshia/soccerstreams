@@ -24,7 +24,7 @@ func init() {
 }
 
 func main() {
-	client, err := soccerstream.NewDatastoreClient()
+	client, err := soccerstreams.NewDatastoreClient()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,14 +36,7 @@ func main() {
 
 	agent := NewSOCAgent(bot, client)
 
-	// agent.Comment(&reddit.Comment{
-	// 	ParentID: "t3_7yxtok",
-	// 	Author:   "me",
-	// 	Body:     "**HD** | [ENGLISH TSN4 1080p] (http://foundationsports.com/crvcsk/) | MISR : 3mbps | Ad Overlay : 1 | Clicks : 2  | Mobile : Yes.",
-	// })
-	err = agent.Run()
-
-	if err != nil {
+	if err := agent.Run(); err != nil {
 		raven.CaptureErrorAndWait(err, nil)
 		log.Fatal(err)
 	}

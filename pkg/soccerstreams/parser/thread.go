@@ -14,8 +14,8 @@ type threadParser struct {
 	logger *log.Entry
 }
 
-func (t *threadParser) ParseThread(p *reddit.Post) *soccerstream.Matchthread {
-	var mt soccerstream.Matchthread
+func (t *threadParser) ParseThread(p *reddit.Post) *soccerstreams.Matchthread {
+	var mt soccerstreams.Matchthread
 
 	t.logger = log.WithField("post_id", p.ID).
 		WithField("author", p.Author).

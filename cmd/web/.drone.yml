@@ -22,17 +22,31 @@ pipeline:
     - gometalinter --install
     - gometalinter --fast ./... || exit 0
 
-  build:
+  build-agent:
+    group: build
+    image: golang
+    commands:
+    - cd cmd/agent
+    - GOOS=linux go build
+  build-sweeper:
+    group: build
+    image: golang
+    commands:
+    - cd cmd/agent
+    - GOOS=linux go build
+  build-web:
+    group: build
     image: golang
     commands:
     - go get github.com/revel/cmd/revel
+    - cd cmd/web
     - GOOS=linux revel package github.com/Rukenshia/soc-web prod
 
   upload:
     branch: master
     image: appleboy/drone-scp
     source: soc-web.tar.gz
-    target: "/root/soc-web/drone_ci_${DRONE_COMMIT_SHA}"
+    target: "/root/soccerstreams/cmd/webdrone_ci_${DRONE_COMMIT_SHA}"
     host: server.in.fkn.space
     secrets:
     - ssh_username

@@ -153,13 +153,13 @@ func Test_singleStreamParser_Parse(t *testing.T) {
 		name string
 		w    *singleStreamParser
 		args args
-		want []*soccerstream.Soccerstream
+		want []*soccerstreams.Soccerstream
 	}{
 		{
 			args: args{
 				message: `520p Stream | EN | [Basel vs Manchester City](http://buffstreamz.com/watch/soccer-2.php) | MISR : 1mbps | Mobile : Yes | Clicks : 3`,
 			},
-			want: []*soccerstream.Soccerstream{
+			want: []*soccerstreams.Soccerstream{
 				{
 					Channel:        "Basel vs Manchester City",
 					Link:           "http://buffstreamz.com/watch/soccer-2.php",
@@ -174,7 +174,7 @@ func Test_singleStreamParser_Parse(t *testing.T) {
 			args: args{
 				message: `520p Stream | EN | [Juventus vs Tottenham Hotspur](http://buffstreamz.com/watch/soccer.php) | MISR : 1mbps | Mobile : Yes | Clicks : 3`,
 			},
-			want: []*soccerstream.Soccerstream{
+			want: []*soccerstreams.Soccerstream{
 				{
 					Channel:        "Juventus vs Tottenham Hotspur",
 					Link:           "http://buffstreamz.com/watch/soccer.php",
@@ -189,7 +189,7 @@ func Test_singleStreamParser_Parse(t *testing.T) {
 			args: args{
 				message: `**HD** | [ENGLISH TSN4 1080p] (http://foundationsports.com/crvcsk/) | MISR : 3mbps | Ad Overlay : 1 | Clicks : 2  | Mobile : Yes.`,
 			},
-			want: []*soccerstream.Soccerstream{
+			want: []*soccerstreams.Soccerstream{
 				{
 					Quality:        "HD",
 					Channel:        "ENGLISH TSN4 1080p",

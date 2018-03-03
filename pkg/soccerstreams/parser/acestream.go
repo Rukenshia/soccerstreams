@@ -17,8 +17,8 @@ type acestreamParser struct{}
 // https://i.imgur.com/OzITykQ.png
 // acestream://CONTENT-ID [QUALITY] [CHANNEL NAME] [LANGUAGE]
 
-func (a *acestreamParser) Parse(comment string) []*soccerstream.Soccerstream {
-	var streams []*soccerstream.Soccerstream
+func (a *acestreamParser) Parse(comment string) []*soccerstreams.Soccerstream {
+	var streams []*soccerstreams.Soccerstream
 
 	for _, line := range strings.Split(comment, "\n") {
 		if stream := a.parseLine(line); stream != nil {
@@ -30,14 +30,14 @@ func (a *acestreamParser) Parse(comment string) []*soccerstream.Soccerstream {
 	return streams
 }
 
-func (a *acestreamParser) parseLine(line string) *soccerstream.Soccerstream {
+func (a *acestreamParser) parseLine(line string) *soccerstreams.Soccerstream {
 	l, is := a.parseLink(line)
 
 	if !is {
 		return nil
 	}
 
-	s := &soccerstream.Soccerstream{}
+	s := &soccerstreams.Soccerstream{}
 	s.Link = fmt.Sprintf("acestream://%s", l)
 	s.Channel = "Acestream"
 

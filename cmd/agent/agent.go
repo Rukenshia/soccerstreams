@@ -12,10 +12,10 @@ import (
 
 type SOCAgent struct {
 	bot    reddit.Bot
-	client soccerstream.DBClient
+	client soccerstreams.DBClient
 }
 
-func NewSOCAgent(bot reddit.Bot, client soccerstream.DBClient) *SOCAgent {
+func NewSOCAgent(bot reddit.Bot, client soccerstreams.DBClient) *SOCAgent {
 	return &SOCAgent{bot, client}
 }
 

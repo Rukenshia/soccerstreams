@@ -1,6 +1,6 @@
 workspace:
   base: /go
-  path: src/github.com/Rukenshia/soccerstreams/pkg
+  path: src/github.com/Rukenshia/soccerstreams
 
 pipeline:
   dependencies:

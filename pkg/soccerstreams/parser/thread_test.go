@@ -22,7 +22,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 		name string
 		t    *threadParser
 		args args
-		want *soccerstream.Matchthread
+		want *soccerstreams.Matchthread
 	}{
 		{
 			args: args{
@@ -31,7 +31,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 					LinkFlairText: "UEFA Europa League",
 				},
 			},
-			want: &soccerstream.Matchthread{
+			want: &soccerstreams.Matchthread{
 				Team1:   "København",
 				Team2:   "Atlético Madrid",
 				Kickoff: &gmt1am,
@@ -44,7 +44,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 					LinkFlairText: "UEFA Europa League",
 				},
 			},
-			want: &soccerstream.Matchthread{
+			want: &soccerstreams.Matchthread{
 				Team1:   "København",
 				Team2:   "Atlético Madrid",
 				Kickoff: &gmt805pm,
@@ -57,7 +57,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 					LinkFlairText: "UEFA Europa League",
 				},
 			},
-			want: &soccerstream.Matchthread{
+			want: &soccerstreams.Matchthread{
 				Team1:   "Celtic",
 				Team2:   "Zenit",
 				Kickoff: &gmt805pm,
@@ -70,7 +70,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 					LinkFlairText: "UEFA Europa League",
 				},
 			},
-			want: &soccerstream.Matchthread{
+			want: &soccerstreams.Matchthread{
 				Team1:   "Celtic",
 				Team2:   "Zenit",
 				Kickoff: &gmt805pm,
@@ -82,7 +82,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 					Title: "[20:05 GMT] Celtic v Zenit",
 				},
 			},
-			want: &soccerstream.Matchthread{
+			want: &soccerstreams.Matchthread{
 				Team1:   "Celtic",
 				Team2:   "Zenit",
 				Kickoff: &gmt805pm,
@@ -94,7 +94,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 					Title: "[20:05 GMT] Celtic - Zenit",
 				},
 			},
-			want: &soccerstream.Matchthread{
+			want: &soccerstreams.Matchthread{
 				Team1:   "Celtic",
 				Team2:   "Zenit",
 				Kickoff: &gmt805pm,
@@ -106,7 +106,7 @@ func Test_threadParser_ParseThread(t *testing.T) {
 					Title: "[20:05 GMT] Celtic VS Zenit",
 				},
 			},
-			want: &soccerstream.Matchthread{
+			want: &soccerstreams.Matchthread{
 				Team1:   "Celtic",
 				Team2:   "Zenit",
 				Kickoff: &gmt805pm,
