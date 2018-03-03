@@ -40,7 +40,7 @@ pipeline:
     commands:
     - go get github.com/revel/cmd/revel
     - cd cmd/web
-    - GOOS=linux revel package github.com/Rukenshia/soc-web prod
+    - GOOS=linux revel package github.com/Rukenshia/soccerstreams/cmd/web prod
 
   upload-agent:
     group: upload
