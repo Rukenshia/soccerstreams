@@ -6,7 +6,7 @@ pipeline:
   dependencies:
     image: golang
     commands:
-    - go get -v
+    - go get -v ./...
 
   test:
     group: qa
