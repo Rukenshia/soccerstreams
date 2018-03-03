@@ -38,7 +38,7 @@ pipeline:
     group: build
     image: golang
     commands:
-    - go get github.com/revel/revel/cmd
+    - go get github.com/revel/cmd/revel
     - cd cmd/web
     - GOOS=linux revel package github.com/Rukenshia/soc-web prod
 
