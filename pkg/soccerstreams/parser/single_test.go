@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Rukenshia/soc-agent/soccerstream"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 )
 
 func Test_singleStreamParser_parseQuality(t *testing.T) {

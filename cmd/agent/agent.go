@@ -1,10 +1,10 @@
-package agent
+package main
 
 import (
 	"log"
 	"os"
 
-	"github.com/Rukenshia/soc-agent/soccerstream"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
 	"github.com/turnage/graw"
 	"github.com/turnage/graw/reddit"

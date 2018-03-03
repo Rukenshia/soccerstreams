@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/Rukenshia/soc-agent/soccerstream"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	"github.com/turnage/graw/reddit"
 )
 
@@ -37,5 +37,5 @@ func ParseComment(c *reddit.Comment) []*soccerstream.Soccerstream {
 func ParsePost(p *reddit.Post) *soccerstream.Matchthread {
 	var parser PostParser
 
-	return parser.ParseThread(p)
+	return parser.Parse(p)
 }

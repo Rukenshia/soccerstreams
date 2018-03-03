@@ -1,11 +1,11 @@
-package agent
+package main
 
 import (
 	"fmt"
 	"strings"
 
-	"github.com/Rukenshia/soc-agent/logging"
-	"github.com/Rukenshia/soc-agent/parser"
+	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams/parser"
 	raven "github.com/getsentry/raven-go"
 	"github.com/turnage/graw/reddit"
 

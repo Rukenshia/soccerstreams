@@ -1,4 +1,4 @@
-package soccerstream
+package soccerstreams
 
 import (
 	"context"
@@ -47,4 +47,28 @@ func (d *Datastore) Get(id string) (*Matchthread, error) {
 	}
 
 	return m, nil
+}
+
+func (c *Datastore) GetAll(query *datastore.Query) ([]*Matchthread, error) {
+	var threads []*Matchthread
+
+	if _, err := c.client.GetAll(context.Background(), query, &threads); err != nil {
+		return threads, err
+	}
+
+	for _, thread := range threads {
+		thread.SetClient(c)
+	}
+
+	return threads, nil
+}
+
+func (c *Datastore) DeleteMulti(ids []string) error {
+	var keys []*datastore.Key
+
+	for _, id := range ids {
+		keys = append(keys, c.Key(id))
+	}
+
+	return c.client.DeleteMulti(context.Background(), keys)
 }

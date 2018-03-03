@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"cloud.google.com/go/datastore"
-	"github.com/Rukenshia/soc-agent/soccerstream"
-	"github.com/Rukenshia/soc-web/app"
+	"github.com/Rukenshia/soccerstreams/cmd/web/app"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	"github.com/revel/revel"
 	"github.com/revel/revel/cache"
 )
@@ -18,14 +18,14 @@ type App struct {
 }
 
 type FrontendMatchthread struct {
-	*soccerstream.Matchthread
+	*soccerstreams.Matchthread
 
 	GMTKickoff    string
 	IsLive        bool
 	NumAcestreams int
 	NumWebstreams int
-	Acestreams    []*soccerstream.Soccerstream
-	Webstreams    []*soccerstream.Soccerstream
+	Acestreams    []*soccerstreams.Soccerstream
+	Webstreams    []*soccerstreams.Soccerstream
 }
 
 type ByKickoff []*FrontendMatchthread

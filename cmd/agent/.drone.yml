@@ -1,6 +1,6 @@
 workspace:
   base: /go
-  path: src/github.com/Rukenshia/soc-agent
+  path: src/github.com/Rukenshia/soccerstreams/pkg
 
 pipeline:
   dependencies:
@@ -30,8 +30,8 @@ pipeline:
   upload:
     branch: master
     image: appleboy/drone-scp
-    source: soc-agent
-    target: "/root/soc-agent/drone_ci_${DRONE_COMMIT_SHA}"
+    source: soccerstreams/pkg
+    target: "/root/soccerstreams/pkg/drone_ci_${DRONE_COMMIT_SHA}"
     host: server.in.fkn.space
     secrets:
     - ssh_username
@@ -45,13 +45,13 @@ pipeline:
     - ssh_username
     - ssh_key
     script:
-    - cd soc-agent
-    - killall soc-agent
-    - "mv drone_ci_${DRONE_COMMIT_SHA}/soc-agent soc-agent"
+    - cd soccerstreams/pkg
+    - killall soccerstreams/pkg
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/soccerstreams/pkg soccerstreams/pkg"
     - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
-    - "unlink soc-agent.latest.log"
-    - "ln -s ./soc-agent.${DRONE_COMMIT_SHA}.log soc-agent.latest.log"
-    - ./soc-agent > "./soc-agent.${DRONE_COMMIT_SHA}.log" 2>&1 &
+    - "unlink soccerstreams/pkg.latest.log"
+    - "ln -s ./soccerstreams/pkg.${DRONE_COMMIT_SHA}.log soccerstreams/pkg.latest.log"
+    - ./soccerstreams/pkg > "./soccerstreams/pkg.${DRONE_COMMIT_SHA}.log" 2>&1 &
 
   notify:
     branch: master

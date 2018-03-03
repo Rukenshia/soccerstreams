@@ -1,8 +1,8 @@
-package agent
+package main
 
 import (
-	"github.com/Rukenshia/soc-agent/logging"
-	"github.com/Rukenshia/soc-agent/parser"
+	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams/parser"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/turnage/graw/reddit"

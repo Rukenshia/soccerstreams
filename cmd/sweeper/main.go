@@ -1,14 +1,13 @@
 package main
 
 import (
-	"context"
 	"io/ioutil"
 	"os"
 	"time"
 
 	"cloud.google.com/go/datastore"
 
-	"github.com/Rukenshia/soc-agent/soccerstream"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
 )
@@ -38,8 +37,7 @@ func init() {
 func main() {
 	log.Debugf("Starting sweeper process")
 
-	ctx := context.Background()
-	client, err := soccerstream.NewClient()
+	client, err := soccerstreams.NewDatastoreClient()
 	if err != nil {
 		raven.CaptureErrorAndWait(err, nil)
 		log.Fatal(err)
@@ -51,22 +49,23 @@ func main() {
 		log.Debugf("Sweeping entries")
 		query := datastore.NewQuery("matchthread").Filter("ExpiresAt <", t)
 
-		var threads []*soccerstream.Matchthread
-
-		keys, err := client.GetAll(ctx, query, &threads)
+		threads, err := client.GetAll(query)
 		if err != nil {
 			raven.CaptureError(err, nil)
 			log.Errorf("Could not get matchthreads: %v", err)
 		}
 
+		var ids []string
 		for _, thread := range threads {
 			log.WithField("post_id", thread.RedditID).
 				WithField("team1", thread.Team1).
 				WithField("team2", thread.Team2).
 				WithField("kickoff", thread.Kickoff).Debugf("Matchthread %s has been selected for sweeping, it expired %ds ago", thread.DBKey(), int64(time.Since(thread.ExpiresAt).Seconds()))
+
+			ids = append(ids, thread.DBKey())
 		}
 
-		if err := client.DeleteMulti(ctx, keys); err != nil {
+		if err := client.DeleteMulti(ids); err != nil {
 			log.Errorf("Could not delete matchthreads: %v", err)
 		}
 	}

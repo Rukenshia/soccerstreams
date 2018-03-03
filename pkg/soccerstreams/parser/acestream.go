@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Rukenshia/soc-agent/logging"
-	"github.com/Rukenshia/soc-agent/soccerstream"
+	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
 )

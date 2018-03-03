@@ -3,8 +3,7 @@ package main
 import (
 	"io/ioutil"
 
-	"github.com/Rukenshia/soc-agent/agent"
-	"github.com/Rukenshia/soc-agent/soccerstream"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/turnage/graw/reddit"
@@ -35,7 +34,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	agent := agent.NewSOCAgent(bot, client)
+	agent := NewSOCAgent(bot, client)
 
 	// agent.Comment(&reddit.Comment{
 	// 	ParentID: "t3_7yxtok",

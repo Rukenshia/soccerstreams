@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Rukenshia/soc-agent/soccerstream"
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	log "github.com/sirupsen/logrus"
 	"github.com/turnage/graw/reddit"
 )

@@ -1,4 +1,4 @@
-package soccerstream
+package soccerstreams
 
 type Soccerstream struct {
 	CommentLink    string
