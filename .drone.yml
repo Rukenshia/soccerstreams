@@ -22,10 +22,25 @@ pipeline:
     - gometalinter --install
     - gometalinter --fast ./... || exit 0
 
-  build:
+  build-agent:
+    group: build
     image: golang
     commands:
+    - cd cmd/agent
     - GOOS=linux go build
+  build-sweeper:
+    group: build
+    image: golang
+    commands:
+    - cd cmd/sweeper
+    - GOOS=linux go build
+  build-web:
+    group: build
+    image: golang
+    commands:
+    - go get github.com/revel/cmd
+    - cd cmd/web
+    - GOOS=linux revel package github.com/Rukenshia/soc-web prod
 
   upload:
     branch: master
