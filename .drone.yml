@@ -38,15 +38,36 @@ pipeline:
     group: build
     image: golang
     commands:
-    - go get github.com/revel/cmd
+    - go get github.com/revel/revel/cmd
     - cd cmd/web
     - GOOS=linux revel package github.com/Rukenshia/soc-web prod
 
-  upload:
+  upload-agent:
+    group: upload
+    branch: master
+    image: appleboy/drone-scp
+    source: cmd/agent/agent
+    target: "/root/soc-agent/drone_ci_${DRONE_COMMIT_SHA}"
+    host: server.in.fkn.space
+    secrets:
+    - ssh_username
+    - ssh_key
+  upload-sweeper:
+    group: upload
+    branch: master
+    image: appleboy/drone-scp
+    source: cmd/sweeper/sweeper
+    target: "/root/soc-sweeper/drone_ci_${DRONE_COMMIT_SHA}"
+    host: server.in.fkn.space
+    secrets:
+    - ssh_username
+    - ssh_key
+  upload-web:
+    group: upload
     branch: master
     image: appleboy/drone-scp
     source: soccerstreams/pkg
-    target: "/root/soccerstreams/pkg/drone_ci_${DRONE_COMMIT_SHA}"
+    target: "/root/soc-web/drone_ci_${DRONE_COMMIT_SHA}"
     host: server.in.fkn.space
     secrets:
     - ssh_username
@@ -60,13 +81,26 @@ pipeline:
     - ssh_username
     - ssh_key
     script:
-    - cd soccerstreams/pkg
-    - killall soccerstreams/pkg
-    - "mv drone_ci_${DRONE_COMMIT_SHA}/soccerstreams/pkg soccerstreams/pkg"
+    - cd soc-agent
+    - killall soc-agent
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/agent soc-agent"
     - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
-    - "unlink soccerstreams/pkg.latest.log"
-    - "ln -s ./soccerstreams/pkg.${DRONE_COMMIT_SHA}.log soccerstreams/pkg.latest.log"
-    - ./soccerstreams/pkg > "./soccerstreams/pkg.${DRONE_COMMIT_SHA}.log" 2>&1 &
+    - "unlink soc-agent.latest.log"
+    - "ln -s ./soc-agent.${DRONE_COMMIT_SHA}.log soc-agent.latest.log"
+    - ./soc-agent > "./soc-agent.${DRONE_COMMIT_SHA}.log" 2>&1 &
+    - cd ../soc-sweeper
+    - killall soc-sweeper
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/sweeper soc-sweeper"
+    - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
+    - "unlink soc-sweeper.latest.log"
+    - "ln -s ./soc-sweeper.${DRONE_COMMIT_SHA}.log soc-sweeper.latest.log"
+    - ./soc-sweeper > "./soc-sweeper.${DRONE_COMMIT_SHA}.log" 2>&1 &
+    - cd ../soc-web
+    - killall soc-web
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/soc-web.tar.gz soc-web.tar.gz"
+    - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
+    - tar -xzf soc-web.tar.gz
+    - ./run.sh > /dev/null 2>&1 &
 
   notify:
     branch: master
