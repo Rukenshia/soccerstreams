@@ -1,0 +1,8 @@
+sentry
+graw
+
+.vscode
+.DS_Store
+test-results/
+tmp/
+routes/

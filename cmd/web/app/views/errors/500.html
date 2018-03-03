@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Application error</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/assets/css/bulma.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/soc.css">
+	<style>
+		.title,
+		.subtitle {
+			font-family: 'Roboto Mono', monospace;
+		}
+	</style>
+</head>
+
+<body>
+	<section>
+		<div class="container">
+			<div class="notification">
+				{{if eq .RunMode "dev"}} {{template "errors/500-dev.html" .}} {{else}} {{with .Error}}
+				<h1 class="title has-text-danger">
+					{{.Title}}
+				</h1>
+				<p class="subtitle">{{.Description}}</p> {{end}} {{end}}
+				<a class="button is-outlined is-danger" href="/">Go back home</a>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

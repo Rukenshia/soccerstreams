@@ -1,0 +1,72 @@
+workspace:
+  base: /go
+  path: src/github.com/Rukenshia/soc-agent
+
+pipeline:
+  dependencies:
+    image: golang
+    commands:
+    - go get -v
+
+  test:
+    group: qa
+    image: golang
+    commands:
+    - go test ./...
+
+  lint:
+    group: qa
+    image: golang
+    commands:
+    - go get github.com/alecthomas/gometalinter
+    - gometalinter --install
+    - gometalinter --fast ./... || exit 0
+
+  build:
+    image: golang
+    commands:
+    - GOOS=linux go build
+
+  upload:
+    branch: master
+    image: appleboy/drone-scp
+    source: soc-agent
+    target: "/root/soc-agent/drone_ci_${DRONE_COMMIT_SHA}"
+    host: server.in.fkn.space
+    secrets:
+    - ssh_username
+    - ssh_key
+
+  run:
+    branch: master
+    image: appleboy/drone-ssh
+    host: server.in.fkn.space
+    secrets:
+    - ssh_username
+    - ssh_key
+    script:
+    - cd soc-agent
+    - killall soc-agent
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/soc-agent soc-agent"
+    - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
+    - "unlink soc-agent.latest.log"
+    - "ln -s ./soc-agent.${DRONE_COMMIT_SHA}.log soc-agent.latest.log"
+    - ./soc-agent > "./soc-agent.${DRONE_COMMIT_SHA}.log" 2>&1 &
+
+  notify:
+    branch: master
+    image: appleboy/drone-telegram
+    format: html
+    secrets:
+    - source: telegram_user
+      target: telegram_to
+    - source: telegram_token
+      target: telegram_token
+    when:
+      status: [ success, failure ]
+    message: |
+      {{#success build.status}}
+        &#x1F680 build {{repo.name}}#{{build.number}} succeeded.
+      {{else}}
+        &#x1F534 build {{repo.name}}#{{build.number}} failed.
+      {{/success}}

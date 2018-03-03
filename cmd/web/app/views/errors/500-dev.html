@@ -1,0 +1,14 @@
+{{with .Error}}
+<h1 class="title has-text-danger">
+    {{.Title}}
+</h1>
+<p class="subtitle">{{.Description}}</p>
+{{if .Path}}
+<pre style="line-height: 1em;">
+                    // {{.Path}}
+                    // Line {{.Line}}
+                    {{range .ContextSource}}
+                    <span class="{{if .IsError}}has-text-danger{{end}}"><span>{{.Line}}</span>  {{.Source}}</span>
+                    {{end}}
+                </pre> {{end}} {{end}}
+<br />

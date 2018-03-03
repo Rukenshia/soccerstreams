@@ -1,0 +1,13 @@
+{{with .Error}}
+<h1 class="title has-text-danger">
+    {{.Title}}
+</h1>
+<p class="subtitle">{{.Description}}</p>
+{{end}} {{if gt (len .Router.Routes) 0}}
+<pre style="line-height: .9em;">
+                    // Routes tried
+                    {{range .Router.Routes}}
+                    {{pad .Method 10}}{{pad .Path 50}}{{.Action}}
+                    {{end}}
+                </pre> {{end}}
+<br />

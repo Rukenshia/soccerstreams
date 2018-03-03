@@ -1,0 +1,70 @@
+workspace:
+  base: /go
+  path: src/github.com/Rukenshia/soc-sweeper
+
+pipeline:
+  dependencies:
+    image: golang
+    commands:
+    - go get -v
+
+  test:
+    group: qa
+    image: golang
+    commands:
+    - go test ./...
+
+  lint:
+    group: qa
+    image: golang
+    commands:
+    - go get github.com/alecthomas/gometalinter
+    - gometalinter --install
+    - gometalinter --fast ./...
+
+  build:
+    image: golang
+    commands:
+    - GOOS=linux go build
+
+  upload:
+    branch: master
+    image: appleboy/drone-scp
+    source: soc-sweeper
+    target: "/root/soc-sweeper/drone_ci_${DRONE_COMMIT_SHA}"
+    host: server.in.fkn.space
+    secrets:
+    - ssh_username
+    - ssh_key
+
+  run:
+    branch: master
+    image: appleboy/drone-ssh
+    host: server.in.fkn.space
+    secrets:
+    - ssh_username
+    - ssh_key
+    script:
+    - cd soc-sweeper
+    - killall soc-sweeper
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/soc-sweeper soc-sweeper"
+    - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
+    - ./soc-sweeper > /dev/null 2>&1 &
+
+  notify:
+    branch: master
+    image: appleboy/drone-telegram
+    format: html
+    secrets:
+    - source: telegram_user
+      target: telegram_to
+    - source: telegram_token
+      target: telegram_token
+    when:
+      status: [ success, failure ]
+    message: |
+      {{#success build.status}}
+        &#x1F680 build {{repo.name}}#{{build.number}} succeeded.
+      {{else}}
+        &#x1F534 build {{repo.name}}#{{build.number}} failed.
+      {{/success}}

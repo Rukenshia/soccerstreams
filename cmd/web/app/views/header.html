@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>{{.title}}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.ravenjs.com/3.19.1/raven.min.js" crossorigin="anonymous"></script>
+  <script>
+    Raven.config('https://b028ecfddc3f484c9a4e98e5cbb2d82d@sentry.in.fkn.space/4').install()
+  </script>
+  <link rel="stylesheet" type="text/css" href="/assets/css/bulma.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/bulma-tooltip.min.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png"> {{range .moreStyles}}
+  <link rel="stylesheet" type="text/css" href="/assets/{{.}}"> {{end}} {{range .moreScripts}}
+  <script src="/assets/{{.}}" type="text/javascript" charset="utf-8"></script> {{end}}
+</head>
+
+<body>

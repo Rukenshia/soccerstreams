@@ -1,0 +1,19 @@
+.has-no-streams > article {
+    opacity: .3;
+}
+
+.has-no-streams {
+    position: relative;
+}
+
+.has-no-streams > .overlay {
+    text-align: center;
+}
+
+.has-top-spacing {
+    margin-top: 1em;
+}
+
+.club-image {
+    max-height: 7em;
+}
