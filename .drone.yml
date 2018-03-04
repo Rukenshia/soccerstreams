@@ -66,7 +66,7 @@ pipeline:
     group: upload
     branch: master
     image: appleboy/drone-scp
-    source: soccerstreams/pkg
+    source: cmd/web/web.tar.gz
     target: "/root/soc-web/drone_ci_${DRONE_COMMIT_SHA}"
     host: server.in.fkn.space
     secrets:
@@ -97,7 +97,7 @@ pipeline:
     - ./soc-sweeper > "./soc-sweeper.${DRONE_COMMIT_SHA}.log" 2>&1 &
     - cd ../soc-web
     - killall soc-web
-    - "mv drone_ci_${DRONE_COMMIT_SHA}/soc-web.tar.gz soc-web.tar.gz"
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/web.tar.gz soc-web.tar.gz"
     - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
     - tar -xzf soc-web.tar.gz
     - ./run.sh > /dev/null 2>&1 &
