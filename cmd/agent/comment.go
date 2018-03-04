@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
-	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams/parser"
+	"github.com/Rukenshia/soccerstreams/pkg/parser"
 	raven "github.com/getsentry/raven-go"
 	"github.com/turnage/graw/reddit"
 
