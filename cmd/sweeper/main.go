@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"io/ioutil"
-	"os"
 	"time"
 
 	"cloud.google.com/go/datastore"
@@ -15,12 +14,6 @@ import (
 
 func init() {
 	log.SetLevel(log.DebugLevel)
-
-	f, err := os.OpenFile("soc-sweeper.log", os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(f)
 
 	sentryb, err := ioutil.ReadFile("sentry")
 	if err != nil {
