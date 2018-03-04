@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"io/ioutil"
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
@@ -24,7 +25,7 @@ func init() {
 }
 
 func main() {
-	client, err := soccerstreams.NewDatastoreClient()
+	client, err := soccerstreams.NewDatastoreClient(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,7 +35,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	agent := NewSOCAgent(bot, client)
+	agent := NewAgent(bot, client)
 
 	if err := agent.Run(); err != nil {
 		raven.CaptureErrorAndWait(err, nil)

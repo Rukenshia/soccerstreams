@@ -10,7 +10,7 @@ type Matchthread struct {
 	Team1   string
 	Team2   string
 	Kickoff *time.Time
-	Streams []*Soccerstream
+	Streams []*Stream
 
 	UpdatedAt time.Time
 	ExpiresAt time.Time

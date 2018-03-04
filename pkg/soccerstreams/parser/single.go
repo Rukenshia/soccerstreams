@@ -15,8 +15,8 @@ type singleStreamParser struct {
 // https://i.imgur.com/vGlRVgj.png
 // QUALITY | [ NAME ](LINK) | LANGUAGE | MISR | NSFW | DISABLE AD_BLOCK | CLICKS | MOBILE COMPATIBLE
 
-func (w *singleStreamParser) Parse(message string) []*soccerstreams.Soccerstream {
-	var streams []*soccerstreams.Soccerstream
+func (w *singleStreamParser) Parse(message string) []*soccerstreams.Stream {
+	var streams []*soccerstreams.Stream
 
 	for _, line := range strings.Split(message, "\n") {
 		if stream := w.parseLine(line); stream.IsGood() {
@@ -27,8 +27,8 @@ func (w *singleStreamParser) Parse(message string) []*soccerstreams.Soccerstream
 	return streams
 }
 
-func (w *singleStreamParser) parseLine(line string) *soccerstreams.Soccerstream {
-	var s soccerstreams.Soccerstream
+func (w *singleStreamParser) parseLine(line string) *soccerstreams.Stream {
+	var s soccerstreams.Stream
 
 	for _, fragment := range strings.Split(line, "|") {
 		fragment = strings.TrimSpace(fragment)

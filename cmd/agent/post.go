@@ -8,7 +8,7 @@ import (
 	"github.com/turnage/graw/reddit"
 )
 
-func (s *SOCAgent) Post(p *reddit.Post) error {
+func (s *Agent) Post(p *reddit.Post) error {
 	mt := parser.ParsePost(p)
 
 	logger := log.WithField("post_id", p.ID).

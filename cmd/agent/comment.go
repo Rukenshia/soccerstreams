@@ -12,7 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (s *SOCAgent) Comment(p *reddit.Comment) error {
+func (s *Agent) Comment(p *reddit.Comment) error {
 	// We only care about top level comments
 	if !p.IsTopLevel() {
 		return nil
@@ -113,7 +113,7 @@ func (s *SOCAgent) Comment(p *reddit.Comment) error {
 }
 
 // handleAutoModComment First return value being true indicates that an action has been taken and no further processing should happen
-func (s *SOCAgent) handleAutoModComment(c *reddit.Comment) (bool, error) {
+func (s *Agent) handleAutoModComment(c *reddit.Comment) (bool, error) {
 	if c.Author != "AutoModerator" {
 		return false, nil
 	}

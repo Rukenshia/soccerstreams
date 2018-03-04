@@ -10,16 +10,16 @@ import (
 	"github.com/turnage/graw/reddit"
 )
 
-type SOCAgent struct {
+type Agent struct {
 	bot    reddit.Bot
 	client soccerstreams.DBClient
 }
 
-func NewSOCAgent(bot reddit.Bot, client soccerstreams.DBClient) *SOCAgent {
-	return &SOCAgent{bot, client}
+func NewAgent(bot reddit.Bot, client soccerstreams.DBClient) *Agent {
+	return &Agent{bot, client}
 }
 
-func (s *SOCAgent) Run() error {
+func (s *Agent) Run() error {
 	cfg := graw.Config{Subreddits: []string{"soccerstreams"}, SubredditComments: []string{"soccerstreams"}, Logger: log.New(os.Stdout, "graw", 0)}
 
 	_, wait, err := graw.Run(s, s.bot, cfg)

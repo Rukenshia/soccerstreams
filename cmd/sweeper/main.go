@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"time"
@@ -37,7 +38,7 @@ func init() {
 func main() {
 	log.Debugf("Starting sweeper process")
 
-	client, err := soccerstreams.NewDatastoreClient()
+	client, err := soccerstreams.NewDatastoreClient(context.Background())
 	if err != nil {
 		raven.CaptureErrorAndWait(err, nil)
 		log.Fatal(err)

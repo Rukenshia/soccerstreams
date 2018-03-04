@@ -9,66 +9,76 @@ import (
 	"google.golang.org/api/option"
 )
 
-type Datastore struct {
+// DatastoreClient represents a database client for Google Cloud Platform Datastore
+type DatastoreClient struct {
+	ctx    context.Context
 	client *datastore.Client
 }
 
-func NewDatastoreClient() (*Datastore, error) {
-	c, err := datastore.NewClient(context.Background(), "soccerstreams-web", option.WithServiceAccountFile(filepath.Join(os.Getenv("HOME"), ".gcloud/service-accounts/soc-agent.json")))
+// NewDatastoreClient creates a new instance of DatastoreClient
+func NewDatastoreClient(ctx context.Context) (*DatastoreClient, error) {
+	client, err := datastore.NewClient(ctx, "soccerstreams-web", option.WithServiceAccountFile(filepath.Join(os.Getenv("HOME"), ".gcloud/service-accounts/soc-agent.json")))
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &Datastore{
-		client: c,
+	return &DatastoreClient{
+		ctx,
+		client,
 	}, nil
 }
 
-func (d *Datastore) Key(id string) *datastore.Key {
+// Key returns a valid matchthread key for datastore
+func (d *DatastoreClient) Key(id string) *datastore.Key {
 	return datastore.NameKey("matchthread", id, nil)
 }
 
-func (d *Datastore) Upsert(m *Matchthread) error {
-	_, err := d.client.Mutate(context.Background(), datastore.NewUpsert(d.Key(m.DBKey()), m))
+// Upsert inserts or update a Matchthread
+func (d *DatastoreClient) Upsert(m *Matchthread) error {
+	_, err := d.client.Mutate(d.ctx, datastore.NewUpsert(d.Key(m.DBKey()), m))
 
 	return err
 }
 
-func (d *Datastore) Delete(id string) error {
-	return d.client.Delete(context.Background(), d.Key(id))
+// Delete deletes a matchthread based on its id
+func (d *DatastoreClient) Delete(id string) error {
+	return d.client.Delete(d.ctx, d.Key(id))
 }
 
-func (d *Datastore) Get(id string) (*Matchthread, error) {
+// Get returns a Matchthread with the provided id. If it does not exist, an error is returned
+func (d *DatastoreClient) Get(id string) (*Matchthread, error) {
 	m := NewMatchthread(d)
 
-	if err := d.client.Get(context.Background(), d.Key(id), m); err != nil {
+	if err := d.client.Get(d.ctx, d.Key(id), m); err != nil {
 		return nil, err
 	}
 
 	return m, nil
 }
 
-func (c *Datastore) GetAll(query *datastore.Query) ([]*Matchthread, error) {
+// GetAll returns an array of Matchthreads for the provided query
+func (d *DatastoreClient) GetAll(query *datastore.Query) ([]*Matchthread, error) {
 	var threads []*Matchthread
 
-	if _, err := c.client.GetAll(context.Background(), query, &threads); err != nil {
+	if _, err := d.client.GetAll(d.ctx, query, &threads); err != nil {
 		return threads, err
 	}
 
 	for _, thread := range threads {
-		thread.SetClient(c)
+		thread.SetClient(d)
 	}
 
 	return threads, nil
 }
 
-func (c *Datastore) DeleteMulti(ids []string) error {
+// DeleteMulti deletes multiple Matchthreads based on their ids
+func (d *DatastoreClient) DeleteMulti(ids []string) error {
 	var keys []*datastore.Key
 
 	for _, id := range ids {
-		keys = append(keys, c.Key(id))
+		keys = append(keys, d.Key(id))
 	}
 
-	return c.client.DeleteMulti(context.Background(), keys)
+	return d.client.DeleteMulti(d.ctx, keys)
 }

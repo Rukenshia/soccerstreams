@@ -24,8 +24,8 @@ type FrontendMatchthread struct {
 	IsLive        bool
 	NumAcestreams int
 	NumWebstreams int
-	Acestreams    []*soccerstreams.Soccerstream
-	Webstreams    []*soccerstreams.Soccerstream
+	Acestreams    []*soccerstreams.Stream
+	Webstreams    []*soccerstreams.Stream
 }
 
 type ByKickoff []*FrontendMatchthread

@@ -1,6 +1,6 @@
 package soccerstreams
 
-type Soccerstream struct {
+type Stream struct {
 	CommentLink    string
 	Streamer       string
 	Quality        string
@@ -12,7 +12,7 @@ type Soccerstream struct {
 	MobileFriendly bool
 }
 
-func (s *Soccerstream) IsGood() bool {
+func (s *Stream) IsGood() bool {
 	if s.Link == "" || s.Channel == "" {
 		return false
 	}

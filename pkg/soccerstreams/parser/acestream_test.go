@@ -15,13 +15,13 @@ func Test_acestreamParser_Parse(t *testing.T) {
 		name string
 		a    *acestreamParser
 		args args
-		want []*soccerstreams.Soccerstream
+		want []*soccerstreams.Stream
 	}{
 		{
 			args: args{
 				comment: "acestream://cbb102edb320d1cd826af5f9342b10d66efe6fd6  [1920x1080]  [BT Sport]",
 			},
-			want: []*soccerstreams.Soccerstream{
+			want: []*soccerstreams.Stream{
 				{
 					Link:    "acestream://cbb102edb320d1cd826af5f9342b10d66efe6fd6",
 					Quality: "HD",
@@ -33,7 +33,7 @@ func Test_acestreamParser_Parse(t *testing.T) {
 			args: args{
 				comment: "acestream://cbb102edb320d1cd826af5f9342b10d66efe6fd6  [520p]  [BT Sport 2]  [English]",
 			},
-			want: []*soccerstreams.Soccerstream{
+			want: []*soccerstreams.Stream{
 				{
 					Link:    "acestream://cbb102edb320d1cd826af5f9342b10d66efe6fd6",
 					Quality: "520p",
@@ -45,7 +45,7 @@ func Test_acestreamParser_Parse(t *testing.T) {
 			args: args{
 				comment: "acestream://cbb102edb320d1cd826af5f9342b10d66efe6fd6  [520P]  [BT Sport 2]  [Unknown Language]",
 			},
-			want: []*soccerstreams.Soccerstream{
+			want: []*soccerstreams.Stream{
 				{
 					Link:    "acestream://cbb102edb320d1cd826af5f9342b10d66efe6fd6",
 					Quality: "520p",
