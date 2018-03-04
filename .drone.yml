@@ -83,22 +83,21 @@ pipeline:
     script:
     - cd soc-agent
     - killall soc-agent
-    - "find drone_ci_${DRONE_COMMIT_SHA}/"
-    - "mv drone_ci_${DRONE_COMMIT_SHA}/agent soc-agent"
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/cmd/agent/agent soc-agent"
     - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
     - "unlink soc-agent.latest.log"
     - "ln -s ./soc-agent.${DRONE_COMMIT_SHA}.log soc-agent.latest.log"
     - ./soc-agent > "./soc-agent.${DRONE_COMMIT_SHA}.log" 2>&1 &
     - cd ../soc-sweeper
     - killall soc-sweeper
-    - "mv drone_ci_${DRONE_COMMIT_SHA}/sweeper soc-sweeper"
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/cmd/sweeper/sweeper soc-sweeper"
     - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
     - "unlink soc-sweeper.latest.log"
     - "ln -s ./soc-sweeper.${DRONE_COMMIT_SHA}.log soc-sweeper.latest.log"
     - ./soc-sweeper > "./soc-sweeper.${DRONE_COMMIT_SHA}.log" 2>&1 &
     - cd ../soc-web
     - killall soc-web
-    - "mv drone_ci_${DRONE_COMMIT_SHA}/web.tar.gz soc-web.tar.gz"
+    - "mv drone_ci_${DRONE_COMMIT_SHA}/cmd/web/web.tar.gz soc-web.tar.gz"
     - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
     - tar -xzf soc-web.tar.gz
     - ./run.sh > /dev/null 2>&1 &
