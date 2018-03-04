@@ -83,7 +83,7 @@ pipeline:
     script:
     - cd soc-agent
     - killall soc-agent
-    - "ls drone_ci_${DRONE_COMMIT_SHA}/"
+    - "find drone_ci_${DRONE_COMMIT_SHA}/"
     - "mv drone_ci_${DRONE_COMMIT_SHA}/agent soc-agent"
     - "rm -r drone_ci_${DRONE_COMMIT_SHA}"
     - "unlink soc-agent.latest.log"
