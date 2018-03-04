@@ -20,6 +20,8 @@ type Club struct {
 
 var simpleClubMappings = map[string]string{
 	"milan":                  "ac milan",
+	"atlético madrid":        "atletico madrid",
+	"atalanta":               "atalanta bc",
 	"sampdoria":              "uc sampdoria",
 	"barcelona":              "fc barcelona",
 	"inter milano":           "inter mailand",
