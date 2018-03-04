@@ -19,13 +19,14 @@ type Club struct {
 }
 
 var simpleClubMappings = map[string]string{
-	"milan":          "ac milan",
-	"sampdoria":      "uc sampdoria",
-	"barcelona":      "fc barcelona",
-	"inter milano":   "inter mailand",
-	"bayern münchen": "bayern munchen",
-	"beşiktaş":       "besiktas",
-	"bayern munich":  "bayern munchen",
+	"milan":                  "ac milan",
+	"sampdoria":              "uc sampdoria",
+	"barcelona":              "fc barcelona",
+	"inter milano":           "inter mailand",
+	"bayern münchen":         "bayern munchen",
+	"beşiktaş":               "besiktas",
+	"bayern munich":          "bayern munchen",
+	"brighton & hove albion": "brighton and hove albion",
 }
 
 var regexClubMappings = map[string]func([]string) string{
