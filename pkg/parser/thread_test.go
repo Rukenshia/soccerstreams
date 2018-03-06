@@ -9,7 +9,7 @@ import (
 	"github.com/turnage/graw/reddit"
 )
 
-func Test_threadParser_ParseThread(t *testing.T) {
+func Test_threadParser_Parse(t *testing.T) {
 	now := time.Now()
 	gmt, _ := time.LoadLocation("GMT")
 	gmt805pm := time.Date(now.Year(), now.Month(), now.Day(), 20, 5, 0, 0, gmt)
@@ -116,8 +116,8 @@ func Test_threadParser_ParseThread(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tp := &threadParser{}
-			if got := tp.ParseThread(tt.args.p); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("threadParser.ParseThread() = %v, want %v", got, tt.want)
+			if got := tp.Parse(tt.args.p); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("threadParser.Parse() = %v, want %v", got, tt.want)
 			}
 		})
 	}
