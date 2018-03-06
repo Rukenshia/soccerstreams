@@ -35,7 +35,7 @@ func ParseComment(c *reddit.Comment) []*soccerstreams.Stream {
 }
 
 func ParsePost(p *reddit.Post) *soccerstreams.Matchthread {
-	var parser PostParser
+	var parser threadParser
 
 	return parser.Parse(p)
 }
