@@ -6,3 +6,6 @@ graw
 test-results/
 tmp/
 routes/
+
+cmd/*/image
+cmd/web/web.tar.gz

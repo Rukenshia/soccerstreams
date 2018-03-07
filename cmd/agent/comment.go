@@ -12,6 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Comment parses a new reddit comment
 func (s *Agent) Comment(p *reddit.Comment) error {
 	// We only care about top level comments
 	if !p.IsTopLevel() {

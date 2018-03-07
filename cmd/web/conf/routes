@@ -4,8 +4,6 @@
 #
 
 # module:jobs
-
-
 GET     /                                       App.Index
 GET     /match/:thread                          App.Details
 
