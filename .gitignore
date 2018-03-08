@@ -1,6 +1,7 @@
 sentry
 graw
 gcloud-service-account.json
+ca-certificates.pem
 
 .vscode
 .DS_Store
