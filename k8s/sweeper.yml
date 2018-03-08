@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: soccerstreams-sweeper-deployment
@@ -16,8 +16,11 @@ spec:
     spec:
       containers:
       - name: soccerstreams-sweeper
-        image: soccerstreams-sweeper:1.0.2
+        image: gcr.io/soccerstreams-web/sweeper:1.0.2
         imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: "0.05"
         volumeMounts:
         - name: gcloud
           mountPath: "/opt/soccerstreams/gcloud"

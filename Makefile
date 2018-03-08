@@ -17,6 +17,7 @@ secrets:
 	kubectl create secret generic sentry-web --from-file ./cmd/web/sentry
 	kubectl create secret generic graw --from-file ./graw
 	kubectl create secret generic gcloud-service-account --from-file ./gcloud-service-account.json
+	kubectl create secret generic dns-service-account --from-file ./dns-service-account.json
 
 deploy:
 	kubectl apply -f k8s/agent.yml

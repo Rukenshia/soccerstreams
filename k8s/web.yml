@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: soccerstreams-web-deployment
@@ -16,10 +16,9 @@ spec:
     spec:
       containers:
       - name: soccerstreams-web
-        image: soccerstreams-web:1.0.4
-        imagePullPolicy: IfNotPresent
+        image: gcr.io/soccerstreams-web/web:1.0.9
         ports:
-        - containerPort: 9020
+        - containerPort: 8080
         volumeMounts:
         - name: gcloud
           mountPath: "/opt/soccerstreams/gcloud"

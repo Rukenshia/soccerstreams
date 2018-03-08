@@ -5,7 +5,8 @@ bin: $(BINARY_NAME)
 .PHONY: bin
 
 image: $(BINARY_NAME) Dockerfile version
-	docker build -t soccerstreams-$(BINARY_NAME):`cat version` .
+	docker build -t gcr.io/soccerstreams-web/$(BINARY_NAME):`cat version` .
+	gcloud docker -- push gcr.io/soccerstreams-web/$(BINARY_NAME):`cat version`
 	@touch $@
 
 $(BINARY_NAME): $(SOURCES)
