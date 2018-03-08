@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: soccerstreams-sweeper
-        image: soccerstreams-sweeper:1.0.1
+        image: soccerstreams-sweeper:1.0.2
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: gcloud

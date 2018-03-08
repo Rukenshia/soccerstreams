@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: soccerstreams-agent
-        image: soccerstreams-agent:1.0.2
+        image: soccerstreams-agent:1.0.3
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: graw

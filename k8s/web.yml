@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: soccerstreams-web
-        image: soccerstreams-web:1.0.3
+        image: soccerstreams-web:1.0.4
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9020
