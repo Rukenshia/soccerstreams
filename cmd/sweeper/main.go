@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
 	"time"
 
 	"cloud.google.com/go/datastore"
@@ -14,18 +14,7 @@ import (
 
 func init() {
 	log.SetLevel(log.DebugLevel)
-
-	sentryb, err := ioutil.ReadFile("sentry")
-	if err != nil {
-		log.Fatal(err)
-	}
-	sentryb = sentryb[:len(sentryb)-1]
-
-	log.Debugf("Using sentry DSN: %s", string(sentryb))
-
-	if err := raven.SetDSN(string(sentryb)); err != nil {
-		log.Fatal(err)
-	}
+	raven.SetDSN(os.Getenv("SENTRY_DSN"))
 }
 
 func main() {

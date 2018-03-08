@@ -1,11 +1,11 @@
 BINARY_NAME := sweeper
-SOURCES = $(wildcard *.go) $(wildcard **/*.go)
+SOURCES = $(wildcard *.go) $(wildcard **/*.go) $(wildcard ../../pkg/**/*.go)
 
 bin: $(BINARY_NAME)
 .PHONY: bin
 
-image: $(BINARY_NAME) Dockerfile
-	docker build -t soccerstreams-$(BINARY_NAME) .
+image: $(BINARY_NAME) Dockerfile version
+	docker build -t soccerstreams-$(BINARY_NAME):`cat version` .
 	@touch $@
 
 $(BINARY_NAME): $(SOURCES)

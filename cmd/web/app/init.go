@@ -5,10 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"io/ioutil"
-	"log"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/revel/log15"
@@ -36,7 +33,7 @@ var (
 )
 
 func initDB() {
-	db, err := datastore.NewClient(DBCtx, "soccerstreams-web", option.WithServiceAccountFile(filepath.Join(os.Getenv("HOME"), ".gcloud/service-accounts/soc-agent.json")))
+	db, err := datastore.NewClient(DBCtx, "soccerstreams-web", option.WithServiceAccountFile("/opt/soccerstreams/gcloud/gcloud-service-account.json"))
 	if err != nil {
 		revel.AppLog.Fatal(err.Error())
 		return
@@ -85,12 +82,7 @@ func (s *sentryHandler) getCtxFromArray(ctx []interface{}) (map[string]string, e
 }
 
 func init() {
-	sentryb, err := ioutil.ReadFile("sentry")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	raven.SetDSN(string(sentryb))
+	raven.SetDSN(os.Getenv("SENTRY_DSN"))
 
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{

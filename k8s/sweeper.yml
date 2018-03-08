@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soccerstreams-sweeper-deployment
+  labels:
+    app: soccerstreams-sweeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: soccerstreams-sweeper
+  template:
+    metadata:
+      labels:
+        app: soccerstreams-sweeper
+    spec:
+      containers:
+      - name: soccerstreams-sweeper
+        image: soccerstreams-sweeper:1.0.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: gcloud
+          mountPath: "/opt/soccerstreams/gcloud"
+        env:
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry-sweeper
+                key: sentry
+      volumes:
+      - name: gcloud
+        secret:
+          secretName: gcloud-service-account

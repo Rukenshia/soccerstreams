@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
+
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
 	"github.com/Rukenshia/soccerstreams/pkg/parser"
 	raven "github.com/getsentry/raven-go"
@@ -81,7 +83,23 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 
 		logger.Debugf("Found %d new streams", len(streams))
 
-		mt.Streams = append(mt.Streams, streams...)
+		hasStream := func(stream *soccerstreams.Stream) bool {
+			for _, cs := range mt.Streams {
+				if cs.Link == stream.Link {
+					return true
+				}
+			}
+			return false
+		}
+
+		for _, stream := range streams {
+			if hasStream(stream) {
+				logger.Debugf("Skipping duplicate stream")
+				continue
+			}
+
+			mt.Streams = append(mt.Streams, stream)
+		}
 
 		logger.Debugf("saving updated matchthread")
 

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soccerstreams-web-deployment
+  labels:
+    app: soccerstreams-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: soccerstreams-web
+  template:
+    metadata:
+      labels:
+        app: soccerstreams-web
+    spec:
+      containers:
+      - name: soccerstreams-web
+        image: soccerstreams-web:1.0.3
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9020
+        volumeMounts:
+        - name: gcloud
+          mountPath: "/opt/soccerstreams/gcloud"
+        env:
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry-web
+                key: sentry
+      volumes:
+      - name: gcloud
+        secret:
+          secretName: gcloud-service-account

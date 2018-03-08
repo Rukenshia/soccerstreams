@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
@@ -12,16 +12,7 @@ import (
 
 func init() {
 	log.SetLevel(log.DebugLevel)
-
-	sentryb, err := ioutil.ReadFile("sentry")
-	if err != nil {
-		log.Fatal(err)
-	}
-	sentryb = sentryb[:len(sentryb)-1]
-
-	log.Debugf("Using sentry DSN: %s", string(sentryb))
-
-	raven.SetDSN(string(sentryb))
+	raven.SetDSN(os.Getenv("SENTRY_DSN"))
 }
 
 func main() {
@@ -30,7 +21,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	bot, err := reddit.NewBotFromAgentFile("graw", 0)
+	bot, err := reddit.NewBotFromAgentFile("/opt/soccerstreams/graw/graw", 0)
 	if err != nil {
 		log.Fatal(err)
 	}

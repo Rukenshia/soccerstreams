@@ -1,11 +1,15 @@
-BINARY_NAME := web.tar.gz
-SOURCES = $(wildcard *.go) $(wildcard **/*.go) $(wildcard **/*.html) $(wildcard assets/**/*) $(wildcard conf/*)
+BINARY_NAME := web
+SOURCES = $(wildcard *.go) $(wildcard **/*.go) $(wildcard **/*.html) $(wildcard assets/**/*) $(wildcard conf/*) $(wildcard ../../pkg/**/*.go)
 
-bin: $(BINARY_NAME)
+bin: $(BINARY_NAME).tar.gz
 .PHONY: bin
 
-$(BINARY_NAME): $(SOURCES)
+$(BINARY_NAME).tar.gz: $(SOURCES)
 	CGO_ENABLED=0 GOOS=linux revel package github.com/Rukenshia/soccerstreams/cmd/web
+
+image: $(BINARY_NAME).tar.gz Dockerfile version
+	docker build -t soccerstreams-$(BINARY_NAME):`cat version` .
+	@touch $@
 
 test:
 	go test ./...

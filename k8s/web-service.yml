@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: soccerstreams-web-service
+  labels:
+    run: soccerstreams-web-service
+spec:
+  type: NodePort
+  ports:
+  - port: 9020
+    protocol: TCP
+  selector:
+    app: soccerstreams-web

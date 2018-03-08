@@ -2,8 +2,6 @@ package soccerstreams
 
 import (
 	"context"
-	"os"
-	"path/filepath"
 
 	"cloud.google.com/go/datastore"
 	"google.golang.org/api/option"
@@ -17,7 +15,7 @@ type DatastoreClient struct {
 
 // NewDatastoreClient creates a new instance of DatastoreClient
 func NewDatastoreClient(ctx context.Context) (*DatastoreClient, error) {
-	client, err := datastore.NewClient(ctx, "soccerstreams-web", option.WithServiceAccountFile(filepath.Join(os.Getenv("HOME"), ".gcloud/service-accounts/soc-agent.json")))
+	client, err := datastore.NewClient(ctx, "soccerstreams-web", option.WithServiceAccountFile("/opt/soccerstreams/gcloud/gcloud-service-account.json"))
 
 	if err != nil {
 		return nil, err
@@ -37,7 +35,6 @@ func (d *DatastoreClient) Key(id string) *datastore.Key {
 // Upsert inserts or update a Matchthread
 func (d *DatastoreClient) Upsert(m *Matchthread) error {
 	_, err := d.client.Mutate(d.ctx, datastore.NewUpsert(d.Key(m.DBKey()), m))
-
 	return err
 }
 

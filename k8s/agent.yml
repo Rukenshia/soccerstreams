@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soccerstreams-agent-deployment
+  labels:
+    app: soccerstreams-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: soccerstreams-agent
+  template:
+    metadata:
+      labels:
+        app: soccerstreams-agent
+    spec:
+      containers:
+      - name: soccerstreams-agent
+        image: soccerstreams-agent:1.0.2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: graw
+          mountPath: "/opt/soccerstreams/graw"
+        - name: gcloud
+          mountPath: "/opt/soccerstreams/gcloud"
+        env:
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry-agent
+                key: sentry
+      volumes:
+      - name: graw
+        secret:
+          secretName: graw
+      - name: gcloud
+        secret:
+          secretName: gcloud-service-account
