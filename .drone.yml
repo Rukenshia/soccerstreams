@@ -32,7 +32,7 @@ pipeline:
       target: gcr_service_account
     - source: ca_certificates
     commands:
-    - echo "$CA_CERTIFICATES" > cmd/web/ca-certificates.pem
+    - echo "$CA_CERTIFICATES" > cmd/agent/ca-certificates.pem
     - make agent
   build-sweeper:
     group: build
@@ -46,7 +46,7 @@ pipeline:
       target: gcr_service_account
     - source: ca_certificates
     commands:
-    - echo "$CA_CERTIFICATES" > cmd/web/ca-certificates.pem
+    - echo "$CA_CERTIFICATES" > cmd/sweeper/ca-certificates.pem
     - make sweeper
   build-web:
     group: build
