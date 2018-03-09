@@ -1,4 +1,4 @@
 FROM scratch
-ADD ca-certificates.pem /etc/ssl/certs/
+ADD ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 ADD sweeper /
 CMD ["/sweeper"]
