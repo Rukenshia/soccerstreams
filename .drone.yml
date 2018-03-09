@@ -23,6 +23,8 @@ pipeline:
   build-agent-bin:
     group: build
     image: ruken/docker-go-gcr:1.0.1
+    environment:
+      GOPATH: /go
     secrets:
     - source: gcr
       target: gcr_service_account
@@ -31,6 +33,8 @@ pipeline:
   build-sweeper:
     group: build
     image: ruken/docker-go-gcr:1.0.1
+    environment:
+      GOPATH: /go
     secrets:
     - source: gcr
       target: gcr_service_account
@@ -39,6 +43,8 @@ pipeline:
   build-web:
     group: build
     image: ruken/docker-go-gcr:1.0.1
+    environment:
+      GOPATH: /go
     secrets:
     - source: gcr
       target: gcr_service_account
