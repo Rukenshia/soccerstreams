@@ -58,9 +58,7 @@ pipeline:
     secrets:
     - source: gcr
       target: gcr_service_account
-    - source: ca_certificates
     commands:
-    - echo "$CA_CERTIFICATES" > cmd/web/ca-certificates.pem
     - make deps web
   
   notify:
