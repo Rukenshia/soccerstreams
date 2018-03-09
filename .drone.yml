@@ -30,7 +30,9 @@ pipeline:
     secrets:
     - source: gcr
       target: gcr_service_account
+    - ca_certificates
     commands:
+    - echo "$CA_CERTIFICATES" > cmd/web/ca-certificates.pem
     - make agent
   build-sweeper:
     group: build
@@ -42,7 +44,9 @@ pipeline:
     secrets:
     - source: gcr
       target: gcr_service_account
+    - ca_certificates
     commands:
+    - echo "$CA_CERTIFICATES" > cmd/web/ca-certificates.pem
     - make sweeper
   build-web:
     group: build
@@ -54,7 +58,9 @@ pipeline:
     secrets:
     - source: gcr
       target: gcr_service_account
+    - ca_certificates
     commands:
+    - echo "$CA_CERTIFICATES" > cmd/web/ca-certificates.pem
     - make deps web
   
   notify:
