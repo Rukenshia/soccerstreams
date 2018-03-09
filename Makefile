@@ -4,7 +4,7 @@ $(binaries): %: cmd/%
 	cd cmd/$@ && make image
 
 deps:
-	go get -vt ./... github.com/revel/cmd/revel github.com/alecthomas/gometalinter
+	go get -t ./... github.com/revel/cmd/revel github.com/alecthomas/gometalinter
 
 test:
 	go test ./...
