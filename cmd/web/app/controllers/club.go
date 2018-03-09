@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"time"
 
+	"github.com/Rukenshia/soccerstreams/cmd/web/app/controllers/club"
 	"github.com/revel/revel"
 	"github.com/revel/revel/cache"
 )
@@ -18,33 +18,19 @@ type Club struct {
 	*revel.Controller
 }
 
-var simpleClubMappings = map[string]string{
-	"milan":                  "ac milan",
-	"atlético madrid":        "atletico madrid",
-	"atalanta":               "atalanta bc",
-	"sampdoria":              "uc sampdoria",
-	"barcelona":              "fc barcelona",
-	"inter milano":           "inter mailand",
-	"bayern münchen":         "bayern munchen",
-	"beşiktaş":               "besiktas",
-	"bayern munich":          "bayern munchen",
-	"brighton & hove albion": "brighton and hove albion",
-}
-
-var regexClubMappings = map[string]func([]string) string{
-	`^(.*) u[0-9]{2}$`: func(m []string) string { return m[1] },
-}
-
+// InMemoryFile is probably a bad idea
 type InMemoryFile struct {
 	Data        []byte
 	ContentType string
 }
 
+// Apply implements revel.Response and writes the memory file to the HTTP response
 func (r InMemoryFile) Apply(req *revel.Request, resp *revel.Response) {
 	resp.WriteHeader(http.StatusOK, r.ContentType)
 	resp.GetWriter().Write(r.Data)
 }
 
+// Image serves a clubs logo
 func (c Club) Image() revel.Result {
 	path := strings.ToLower(c.Params.Route.Get("club"))
 
@@ -57,17 +43,7 @@ func (c Club) Image() revel.Result {
 		suffixes := []string{"svg", "png"}
 		filename := ""
 		suffix := "svg"
-
-		if perm, ok := simpleClubMappings[path]; ok {
-			path = perm
-		} else {
-			for reStr, res := range regexClubMappings {
-				re := regexp.MustCompile(reStr)
-				if groups := re.FindStringSubmatch(path); len(groups) > 0 {
-					path = res(groups)
-				}
-			}
-		}
+		path = club.NormaliseName(path)
 
 		for _, s := range suffixes {
 			fp := filepath.Join(revel.AppPath[:len(revel.AppPath)-4], "assets", "img", "clubs", fmt.Sprintf("%s.%s", path, s))

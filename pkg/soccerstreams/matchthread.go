@@ -9,10 +9,12 @@ import (
 // Matchthread represents a reddit thread containing Streams.
 // They are usually posted ~1 hour before Kickoff (GMT) and contain basic info (Team 1 vs Team 2)
 type Matchthread struct {
-	Team1   string
-	Team2   string
-	Kickoff *time.Time
-	Streams []*Stream
+	Team1           string
+	Team2           string
+	Competition     string
+	CompetitionName string
+	Kickoff         *time.Time
+	Streams         []*Stream
 
 	UpdatedAt time.Time
 	ExpiresAt time.Time
@@ -59,5 +61,7 @@ func (m *Matchthread) Delete() error {
 // FillRedditInfo uses additional information of the reddit post to populate some fields
 func (m *Matchthread) FillRedditInfo(p *reddit.Post) {
 	m.RedditID = p.ID
+	m.Competition = p.LinkFlairCSSClass
+	m.CompetitionName = p.LinkFlairText
 	m.SetExpiresAt()
 }

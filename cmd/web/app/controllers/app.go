@@ -8,44 +8,17 @@ import (
 
 	"cloud.google.com/go/datastore"
 	"github.com/Rukenshia/soccerstreams/cmd/web/app"
-	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
+	"github.com/Rukenshia/soccerstreams/cmd/web/app/models"
 	"github.com/revel/revel"
 	"github.com/revel/revel/cache"
 )
 
+// App is the main controller for soc-web
 type App struct {
 	*revel.Controller
 }
 
-type FrontendMatchthread struct {
-	*soccerstreams.Matchthread
-
-	GMTKickoff    string
-	IsLive        bool
-	NumAcestreams int
-	NumWebstreams int
-	Acestreams    []*soccerstreams.Stream
-	Webstreams    []*soccerstreams.Stream
-}
-
-type ByKickoff []*FrontendMatchthread
-
-func (b ByKickoff) Len() int { return len(b) }
-func (b ByKickoff) Less(i, j int) bool {
-	now := time.Now()
-	return b[i].Kickoff.After(now) && b[i].Kickoff.Before(*b[j].Kickoff)
-}
-func (b ByKickoff) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
-
-type ByHasStreams []*FrontendMatchthread
-
-func (b ByHasStreams) Len() int { return len(b) }
-func (b ByHasStreams) Less(i, j int) bool {
-	return len(b[i].Streams) > 0
-}
-func (b ByHasStreams) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
-
-func processThread(thread *FrontendMatchthread) {
+func processThread(thread *models.FrontendMatchthread) {
 	if time.Now().After(*thread.Kickoff) {
 		thread.IsLive = true
 	}
@@ -76,9 +49,10 @@ func (c App) handleDbError(err error, baseErr *revel.Error) revel.Result {
 	return revel.ErrorResult{Error: baseErr}
 }
 
+// Index renders the main site (dashboard) with a list of matchthreads
 func (c App) Index() revel.Result {
 	// get all Matchthreads
-	var threads []*FrontendMatchthread
+	var threads models.FrontendMatchthreads
 
 	if err := cache.Get("matchthreads", &threads); err != nil {
 		query := datastore.NewQuery("matchthread")
@@ -92,20 +66,21 @@ func (c App) Index() revel.Result {
 			go cache.Set(fmt.Sprintf("matchthread_%s", thread.DBKey()), thread, 2*time.Minute)
 		}
 
-		sort.Sort(ByKickoff(threads))
-		sort.Sort(ByHasStreams(threads))
+		sort.Sort(models.ByKickoff(threads))
+		sort.Sort(models.ByHasStreams(threads))
 
 		go cache.Set("matchthreads", threads, 2*time.Minute)
 	}
 
 	moreStyles := []string{"css/soc.css"}
 
-	return c.Render(threads, moreStyles)
+	competitions := threads.ByCompetition()
+	return c.Render(competitions, threads, moreStyles)
 }
 
+// Details renders a matchthread's details page with links to the individual streams
 func (c App) Details() revel.Result {
-	// get all Matchthreads
-	thread := &FrontendMatchthread{}
+	thread := &models.FrontendMatchthread{}
 
 	cacheKey := fmt.Sprintf("matchthread_%s", c.Params.Route.Get("thread"))
 
@@ -113,9 +88,6 @@ func (c App) Details() revel.Result {
 		if err := app.DB.Get(app.DBCtx, datastore.NameKey("matchthread", c.Params.Route.Get("thread"), nil), thread); err != nil {
 			return c.handleDbError(err, revel.NewErrorFromPanic(err))
 		}
-
-		c.Log.Debugf("%v", thread)
-
 		processThread(thread)
 
 		go cache.Set(cacheKey, thread, 2*time.Minute)

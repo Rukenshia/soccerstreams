@@ -1,19 +1,5 @@
 {{set . "title" "Overview - Soccerstreams"}} {{template "header.html" .}}
 
-<section class="hero is-info is-bold">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        soc-web
-      </h1>
-      <h2 class="subtitle">
-        <a href="https://reddit.com/r/soccerstreams">/r/soccerstreams</a> matchthreads. data is not controlled by this website.
-      </h2>
-    </div>
-  </div>
-</section>
-
-
 <section class="section">
   <div class="container">
     <div class="columns">
@@ -22,14 +8,20 @@
       </div>
     </div>
 
-    <div class="columns is-multiline">
-      {{if eq (len .threads) 0}}
+    {{if eq (len .threads) 0}}
+    <div class="columns">
       <div class="column has-text-centered">
         <h1 class="title">:(</h1>
         <p class="subtitle">There are currently no matchthreads available.</p>
         <p class="subtitle is-size-7">Matchthreads usually disappear after 2.5 hours on this page</p>
       </div>
-      {{end}} {{range .threads}}
+    </div>
+    {{end}} 
+
+    {{range $k, $competition := .competitions}}
+    <h3 class="subtitle is-uppercase">{{$competition.Name}}</h3>
+    <div class="columns is-multiline">
+      {{range $competition.Matchthreads}}
       <div class="column is-4">
         <div class="box notification {{if eq (len .Streams) 0}}has-no-streams{{end}}" style="min-height: 16em">
           <article>
@@ -82,6 +74,7 @@
       </div>
       {{end}}
     </div>
+    {{end}}
 
     {{if gt (len .threads) 0}}
     <div class="columns">
