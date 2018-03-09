@@ -1,4 +1,5 @@
 FROM scratch
 ADD ca-certificates.pem /etc/ssl/certs/
-ADD agent /agent
+ADD agent /
+
 CMD ["/agent"]
