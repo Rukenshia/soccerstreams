@@ -23,22 +23,25 @@ pipeline:
   build-agent-bin:
     group: build
     image: ruken/docker-go-gcr
-    environment:
-      GCR_SERVICE_ACCOUNT: ${gcr}
+    secrets:
+    - source: gcr
+      target: gcr_service_account
     commands:
     - make agent
   build-sweeper:
     group: build
     image: ruken/docker-go-gcr
-    environment:
-      GCR_SERVICE_ACCOUNT: ${gcr}
+    secrets:
+    - source: gcr
+      target: gcr_service_account
     commands:
     - make sweeper
   build-web:
     group: build
     image: ruken/docker-go-gcr
-    environment:
-      GCR_SERVICE_ACCOUNT: ${gcr}
+    secrets:
+    - source: gcr
+      target: gcr_service_account
     commands:
     - make web
   
