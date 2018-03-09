@@ -17,9 +17,9 @@ pipeline:
     - echo "-$v" >> cmd/agent/version
     - echo "-$v" >> cmd/sweeper/version
     - echo "-$v" >> cmd/web/version
-    - sed -i "s#soccerstreams-web/agent:.*#soccerstreams-web/sweeper:$(cat cmd/agent/version)#" k8s/agent.yml
+    - sed -i "s#soccerstreams-web/agent:.*#soccerstreams-web/agent:$(cat cmd/agent/version)#" k8s/agent.yml
     - sed -i "s#soccerstreams-web/sweeper:.*#soccerstreams-web/sweeper:$(cat cmd/sweeper/version)#" k8s/sweeper.yml
-    - sed -i "s#soccerstreams-web/web:.*#soccerstreams-web/sweeper:$(cat cmd/web/version)#" k8s/web.yml
+    - sed -i "s#soccerstreams-web/web:.*#soccerstreams-web/web:$(cat cmd/web/version)#" k8s/web.yml
 
   ca_certs:
     group: prep
