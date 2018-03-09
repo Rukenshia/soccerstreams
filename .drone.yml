@@ -57,7 +57,6 @@ pipeline:
     commands:
     - make deps web
   
-
   notify:
     branch: master
     image: appleboy/drone-telegram
