@@ -4,7 +4,7 @@ workspace:
 
 pipeline:
   dependencies:
-    image: golang
+    image: docker
     environment:
       DOCKER_HOST: tcp://0.0.0.0:2375
     commands:
