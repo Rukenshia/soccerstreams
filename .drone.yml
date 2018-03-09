@@ -20,21 +20,22 @@ pipeline:
     commands:
     - make lint || exit 0
 
-  build-agent:
+  build-agent-bin:
     group: build
-    image: golang
+    image: ruken/docker-go-gcr
     commands:
     - make agent
   build-sweeper:
     group: build
-    image: golang
+    image: ruken/docker-go-gcr
     commands:
     - make sweeper
   build-web:
     group: build
-    image: golang
+    image: ruken/docker-go-gcr
     commands:
     - make web
+  
 
   notify:
     branch: master

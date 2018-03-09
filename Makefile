@@ -1,10 +1,11 @@
-binaries = agent sweeper web
+images = agent sweeper web
 
-$(binaries): %: cmd/%
+$(images): %: cmd/%
 	cd cmd/$@ && make image
 
 deps:
 	go get -t ./... github.com/revel/cmd/revel github.com/alecthomas/gometalinter
+.PHONY: deps
 
 test:
 	go test ./...

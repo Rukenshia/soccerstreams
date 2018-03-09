@@ -1,6 +1,5 @@
 FROM alpine
-RUN apk update && apk add tzdata
-ADD ca-certificates.pem /etc/ssl/certs/
+RUN apk update && apk add tzdata ca-certificates
 
 WORKDIR /app
 ADD web.tar.gz .
