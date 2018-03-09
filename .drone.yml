@@ -41,44 +41,44 @@ pipeline:
     commands:
     - make lint || exit 0
 
-  get_gcr_auth:
+  build-agent:
     group: build
-    image: ruken/docker-go-gcr
+    image: ruken/docker-go-gcr:latest
     pull: true
     environment:
       GOPATH: /go
+      DOCKER_HOST: tcp://docker:2375
     secrets:
     - source: gcr
       target: GCR_SERVICE_ACCOUNT
     commands:
     - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
-
-  build-agent-bin:
-    group: build
-    image: ruken/docker-go-gcr
-    pull: true
-    environment:
-      GOPATH: /go
-      DOCKER_HOST: tcp://docker:2375
-    commands:
     - make agent
   build-sweeper:
     group: build
-    image: ruken/docker-go-gcr
+    image: ruken/docker-go-gcr:latest
     pull: true
     environment:
       GOPATH: /go
       DOCKER_HOST: tcp://docker:2375
+    secrets:
+    - source: gcr
+      target: GCR_SERVICE_ACCOUNT
     commands:
+    - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
     - make sweeper
   build-web:
     group: build
-    image: ruken/docker-go-gcr
+    image: ruken/docker-go-gcr:latest
     pull: true
     environment:
       GOPATH: /go
       DOCKER_HOST: tcp://docker:2375
+    secrets:
+    - source: gcr
+      target: GCR_SERVICE_ACCOUNT
     commands:
+    - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
     - export PATH=$GOPATH/bin:$PATH
     - make deps web
   
