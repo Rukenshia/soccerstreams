@@ -10,7 +10,7 @@ image: $(BINARY_NAME) Dockerfile version
 	@touch $@
 
 $(BINARY_NAME): $(SOURCES)
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo
+	CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -a -installsuffix cgo
 
 test:
 	go test ./...
