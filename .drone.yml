@@ -29,6 +29,15 @@ pipeline:
     - cp /etc/ssl/certs/ca-certificates.crt cmd/agent/ca-certificates.crt
     - cp /etc/ssl/certs/ca-certificates.crt cmd/sweeper/ca-certificates.crt
 
+  tzdata:
+    group: prep
+    image: alpine
+    commands:
+    - apk add --update tzdata
+    - cp -r /usr/share/zoneinfo cmd/agent/zoneinfo
+    - cp -r /usr/share/zoneinfo cmd/sweeper/zoneinfo
+
+
   test:
     group: qa
     image: golang
