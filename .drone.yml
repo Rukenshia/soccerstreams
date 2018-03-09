@@ -4,9 +4,31 @@ workspace:
 
 pipeline:
   dependencies:
+    group: prep
     image: golang
     commands:
     - make deps
+
+  temp_versions:
+    group: prep
+    image: alpine/git
+    commands:
+    - v=$(git rev-parse --short HEAD)
+    - echo "-$v" >> cmd/agent/version
+    - echo "-$v" >> cmd/sweeper/version
+    - echo "-$v" >> cmd/web/version
+    - sed -i "s#soccerstreams-web/agent:.*#$(cat cmd/agent/version)#" k8s/agent.yml
+    - sed -i "s#soccerstreams-web/sweeper:.*#$(cat cmd/sweeper/version)#" k8s/sweeper.yml
+    - sed -i "s#soccerstreams-web/web:.*#$(cat cmd/web/version)#" k8s/web.yml
+
+  ca_certs:
+    group: prep
+    image: alpine
+    environment:
+    - source: ca_certificates
+    commands:
+    - echo "$CA_CERTIFICATES" > cmd/agent/ca-certificates.pem
+    - echo "$CA_CERTIFICATES" > cmd/sweeper/ca-certificates.pem
 
   test:
     group: qa
@@ -30,10 +52,8 @@ pipeline:
     secrets:
     - source: gcr
       target: GCR_SERVICE_ACCOUNT
-    - source: ca_certificates
     commands:
     - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
-    - echo "$CA_CERTIFICATES" > cmd/agent/ca-certificates.pem
     - make agent
   build-sweeper:
     group: build
@@ -45,10 +65,8 @@ pipeline:
     secrets:
     - source: gcr
       target: GCR_SERVICE_ACCOUNT
-    - source: ca_certificates
     commands:
     - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
-    - echo "$CA_CERTIFICATES" > cmd/sweeper/ca-certificates.pem
     - make sweeper
   build-web:
     group: build
@@ -64,6 +82,17 @@ pipeline:
     - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
     - export PATH=$GOPATH/bin:$PATH
     - make deps web
+  
+  deploy:
+    image: ruken/docker-gke-kubectl
+    secrets:
+    - source: k8s
+      target: K8S_SERVICE_ACCOUNT
+    commands:
+    - f=$(mktemp); echo "$K8S_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
+    - gcloud container clusters get-credentials cluster-1 --zone europe-west1-b --project soccerstreams-web
+    - make deploy
+
   
   notify:
     branch: master
