@@ -6,7 +6,7 @@ pipeline:
   dependencies:
     image: golang
     commands:
-    - go get -v ./...
+    - make deps
 
   test:
     group: qa
@@ -18,7 +18,6 @@ pipeline:
     group: qa
     image: golang
     commands:
-    - go get github.com/alecthomas/gometalinter
     - make lint || exit 0
 
   build-agent:
@@ -35,7 +34,6 @@ pipeline:
     group: build
     image: golang
     commands:
-    - go get github.com/revel/cmd/revel
     - make web
 
   notify:

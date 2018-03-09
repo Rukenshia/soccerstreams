@@ -3,6 +3,9 @@ binaries = agent sweeper web
 $(binaries): %: cmd/%
 	cd cmd/$@ && make image
 
+deps:
+	go get -vt ./... github.com/revel/cmd/revel github.com/alecthomas/gometalinter
+
 test:
 	go test ./...
 .PHONY: test
