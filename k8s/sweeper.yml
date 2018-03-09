@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: soccerstreams-sweeper
-        image: gcr.io/soccerstreams-web/sweeper:1.0.3
+        image: gcr.io/soccerstreams-web/sweeper:1.0.4
         imagePullPolicy: IfNotPresent
         resources:
           requests:

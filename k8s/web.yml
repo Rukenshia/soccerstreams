@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: soccerstreams-web
-        image: gcr.io/soccerstreams-web/web:1.0.9
+        image: gcr.io/soccerstreams-web/web:1.0.10
         ports:
         - containerPort: 8080
         volumeMounts:

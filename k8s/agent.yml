@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: soccerstreams-agent
-        image: gcr.io/soccerstreams-web/agent:1.0.4
+        image: gcr.io/soccerstreams-web/agent:1.0.5
         imagePullPolicy: IfNotPresent
         resources:
           requests:
