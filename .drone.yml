@@ -81,5 +81,5 @@ pipeline:
 services:
   docker:
     image: docker:dind
-    command: [ "--storage-driver=vfs", "--tls=false" ]
+    command: [ "--tls=false" ]
     privileged: true
