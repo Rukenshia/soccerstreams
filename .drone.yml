@@ -32,6 +32,7 @@ pipeline:
       target: GCR_SERVICE_ACCOUNT
     - source: ca_certificates
     commands:
+    - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
     - echo "$CA_CERTIFICATES" > cmd/agent/ca-certificates.pem
     - make agent
   build-sweeper:
@@ -46,6 +47,7 @@ pipeline:
       target: GCR_SERVICE_ACCOUNT
     - source: ca_certificates
     commands:
+    - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
     - echo "$CA_CERTIFICATES" > cmd/sweeper/ca-certificates.pem
     - make sweeper
   build-web:
@@ -59,6 +61,7 @@ pipeline:
     - source: gcr
       target: GCR_SERVICE_ACCOUNT
     commands:
+    - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
     - make deps web
   
   notify:
