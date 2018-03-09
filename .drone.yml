@@ -24,8 +24,7 @@ pipeline:
   ca_certs:
     group: prep
     image: alpine
-    environment:
-    - source: ca_certificates
+    secrets: [ca_certificates]
     commands:
     - echo "$CA_CERTIFICATES" > cmd/agent/ca-certificates.pem
     - echo "$CA_CERTIFICATES" > cmd/sweeper/ca-certificates.pem
