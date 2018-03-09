@@ -62,6 +62,7 @@ pipeline:
       target: GCR_SERVICE_ACCOUNT
     commands:
     - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
+    - export PATH=$GOPATH/bin:$PATH
     - make deps web
   
   notify:
