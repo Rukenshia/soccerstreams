@@ -29,7 +29,7 @@ pipeline:
       DOCKER_HOST: tcp://docker:2375
     secrets:
     - source: gcr
-      target: gcr_service_account
+      target: GCR_SERVICE_ACCOUNT
     - source: ca_certificates
     commands:
     - echo "$CA_CERTIFICATES" > cmd/agent/ca-certificates.pem
@@ -43,7 +43,7 @@ pipeline:
       DOCKER_HOST: tcp://docker:2375
     secrets:
     - source: gcr
-      target: gcr_service_account
+      target: GCR_SERVICE_ACCOUNT
     - source: ca_certificates
     commands:
     - echo "$CA_CERTIFICATES" > cmd/sweeper/ca-certificates.pem
@@ -57,7 +57,7 @@ pipeline:
       DOCKER_HOST: tcp://docker:2375
     secrets:
     - source: gcr
-      target: gcr_service_account
+      target: GCR_SERVICE_ACCOUNT
     commands:
     - make deps web
   
