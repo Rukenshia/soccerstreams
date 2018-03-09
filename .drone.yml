@@ -26,6 +26,7 @@ pipeline:
     pull: true
     environment:
       GOPATH: /go
+      DOCKER_HOST: tcp://0.0.0.0:2375
     secrets:
     - source: gcr
       target: gcr_service_account
@@ -37,6 +38,7 @@ pipeline:
     pull: true
     environment:
       GOPATH: /go
+      DOCKER_HOST: tcp://0.0.0.0:2375
     secrets:
     - source: gcr
       target: gcr_service_account
@@ -48,6 +50,7 @@ pipeline:
     pull: true
     environment:
       GOPATH: /go
+      DOCKER_HOST: tcp://0.0.0.0:2375
     secrets:
     - source: gcr
       target: gcr_service_account
@@ -72,3 +75,9 @@ pipeline:
       {{else}}
         &#x1F534 build {{repo.name}}#{{build.number}} failed.
       {{/success}}
+
+services:
+  docker:
+    image: docker:dind
+    command: [ "--storage-driver=vfs", "--tls=false" ]
+    privileged: true
