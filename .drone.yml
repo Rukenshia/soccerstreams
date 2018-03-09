@@ -68,7 +68,7 @@ pipeline:
     commands:
     - f=$(mktemp); echo "$GCR_SERVICE_ACCOUNT" > $f && gcloud auth activate-service-account --key-file $f
     - make agent
-    - ldd cmd/agent/agent
+    - ldd agent
   # build-sweeper:
   #   group: build
   #   image: ruken/docker-go-gcr:latest
