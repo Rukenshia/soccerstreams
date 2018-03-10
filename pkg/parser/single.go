@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,6 +15,9 @@ type singleStreamParser struct {
 // required format
 // https://i.imgur.com/vGlRVgj.png
 // QUALITY | [ NAME ](LINK) | LANGUAGE | MISR | NSFW | DISABLE AD_BLOCK | CLICKS | MOBILE COMPATIBLE
+
+// We are also implementing this weird kind of format used by apparently a lot of streamers
+// QUALITY | [ NAME | LANGUAGE | MISR | NSFW | DISABLE AD_BLOCK | CLICKS | MOBILE COMPATIBLE] (LINK)
 
 func (w *singleStreamParser) Parse(message string) []*soccerstreams.Stream {
 	var streams []*soccerstreams.Stream
@@ -30,15 +34,31 @@ func (w *singleStreamParser) Parse(message string) []*soccerstreams.Stream {
 func (w *singleStreamParser) parseLine(line string) *soccerstreams.Stream {
 	var s soccerstreams.Stream
 
+	newLine, link, mightHaveFragments, is := w.parseChannel(line)
+	if is {
+		if mightHaveFragments {
+			subData := w.parseLine(newLine)
+
+			if subData != nil {
+				s = *subData
+			}
+			fmt.Println(strings.Index(newLine, "|"))
+			s.Channel = newLine[:strings.Index(newLine, "|")-1]
+			s.Link = link
+		}
+	}
+
 	for _, fragment := range strings.Split(line, "|") {
 		fragment = strings.TrimSpace(fragment)
 
 		if q, is := w.parseQuality(fragment); is {
 			s.Quality = q
 		}
-		if n, l, is := w.parseChannel(fragment); is {
-			s.Link = l
-			s.Channel = n
+		if !mightHaveFragments {
+			if n, l, _, is := w.parseChannel(fragment); is {
+				s.Link = l
+				s.Channel = n
+			}
 		}
 		if m, is := w.parseMISR(fragment); is {
 			s.MISR = m
@@ -67,15 +87,15 @@ func (w *singleStreamParser) parseQuality(fragment string) (string, bool) {
 	return "", false
 }
 
-func (w *singleStreamParser) parseChannel(fragment string) (string, string, bool) {
+func (w *singleStreamParser) parseChannel(fragment string) (string, string, bool, bool) {
 	re := regexp.MustCompile(`\[\s?(.*?)\s?\]\s?\(\s?(.*?)\s?\)`)
 
 	groups := re.FindStringSubmatch(fragment)
 	if len(groups) > 0 {
-		return groups[1], groups[2], true
+		return groups[1], groups[2], strings.Contains(groups[1], "|"), true
 	}
 
-	return "", "", false
+	return "", "", false, false
 }
 
 func (w *singleStreamParser) parseMISR(fragment string) (string, bool) {

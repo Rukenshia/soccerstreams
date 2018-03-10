@@ -72,12 +72,13 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 		want  string
 		want1 string
 		want2 bool
+		want3 bool
 	}{
 		{
 			args: args{
 				fragment: "",
 			},
-			want2: false,
+			want3: false,
 		},
 		{
 			args: args{
@@ -85,7 +86,7 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 			},
 			want:  "X",
 			want1: "Y",
-			want2: true,
+			want3: true,
 		},
 		{
 			args: args{
@@ -93,7 +94,7 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 			},
 			want:  "X",
 			want1: "Y",
-			want2: true,
+			want3: true,
 		},
 		{
 			args: args{
@@ -101,7 +102,7 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 			},
 			want:  "X",
 			want1: "Y",
-			want2: true,
+			want3: true,
 		},
 		{
 			args: args{
@@ -109,7 +110,7 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 			},
 			want:  "X",
 			want1: "Y",
-			want2: true,
+			want3: true,
 		},
 		{
 			args: args{
@@ -117,7 +118,7 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 			},
 			want:  "X",
 			want1: "Y",
-			want2: true,
+			want3: true,
 		},
 		{
 			args: args{
@@ -125,13 +126,22 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 			},
 			want:  "X",
 			want1: "Y",
+			want3: true,
+		},
+		{
+			args: args{
+				fragment: "[ X | **HD** ]( Y )",
+			},
+			want:  "X | **HD**",
+			want1: "Y",
 			want2: true,
+			want3: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := &singleStreamParser{}
-			got, got1, got2 := w.parseChannel(tt.args.fragment)
+			got, got1, got2, got3 := w.parseChannel(tt.args.fragment)
 			if got != tt.want {
 				t.Errorf("singleStreamParser.parseChannel() got = %v, want %v", got, tt.want)
 			}
@@ -140,6 +150,9 @@ func Test_singleStreamParser_parseChannel(t *testing.T) {
 			}
 			if got2 != tt.want2 {
 				t.Errorf("singleStreamParser.parseChannel() got2 = %v, want %v", got2, tt.want2)
+			}
+			if got3 != tt.want3 {
+				t.Errorf("singleStreamParser.parseChannel() got3 = %v, want %v", got3, tt.want3)
 			}
 		})
 	}
@@ -155,6 +168,22 @@ func Test_singleStreamParser_Parse(t *testing.T) {
 		args args
 		want []*soccerstreams.Stream
 	}{
+		{
+			args: args{
+				message: `**HD** | [ Newcastle United vs  Southampton | English | ads 2 | Mobile: Yes ] (http://welovesports.xyz/newcastle-vs-southampton)`,
+			},
+			want: []*soccerstreams.Stream{
+				{
+					Channel:        "Newcastle United vs  Southampton",
+					Link:           "http://welovesports.xyz/newcastle-vs-southampton",
+					IsNSFW:         false,
+					MISR:           "",
+					Quality:        "HD",
+					MobileFriendly: true,
+					Clicks:         0,
+				},
+			},
+		},
 		{
 			args: args{
 				message: `520p Stream | EN | [Basel vs Manchester City](http://buffstreamz.com/watch/soccer-2.php) | MISR : 1mbps | Mobile : Yes | Clicks : 3`,
