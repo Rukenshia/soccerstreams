@@ -4,6 +4,8 @@ import "regexp"
 
 // TODO: move this into some config file
 var simpleClubMappings = map[string]string{
+	"braunschweig":           "eintracht braunschweig",
+	"bochum":                 "vfl bochum",
 	"milan":                  "ac milan",
 	"eibar":                  "sd eibar",
 	"atlético madrid":        "atletico madrid",
