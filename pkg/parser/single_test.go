@@ -170,6 +170,21 @@ func Test_singleStreamParser_Parse(t *testing.T) {
 	}{
 		{
 			args: args{
+				message: `**HD** | [ Everton vs Brighton | BEIN 1 | ARAB | Clicks :1 | MISR: 1 Mbps | Mobile No | Chromecast: Yes ](http://arsenewenger.cf/ch24.html)`,
+			},
+			want: []*soccerstreams.Stream{
+				{
+					Channel:        "Everton vs Brighton",
+					Link:           "http://arsenewenger.cf/ch24.html",
+					IsNSFW:         false,
+					MISR:           "1 Mbps",
+					Quality:        "HD",
+					MobileFriendly: false,
+					Clicks:         1,
+				},
+			},
+		}, {
+			args: args{
 				message: `**HD** | [ Newcastle United vs  Southampton | English | ads 2 | Mobile: Yes ] (http://welovesports.xyz/newcastle-vs-southampton)`,
 			},
 			want: []*soccerstreams.Stream{

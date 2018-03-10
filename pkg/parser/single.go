@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -42,7 +41,6 @@ func (w *singleStreamParser) parseLine(line string) *soccerstreams.Stream {
 			if subData != nil {
 				s = *subData
 			}
-			fmt.Println(strings.Index(newLine, "|"))
 			s.Channel = newLine[:strings.Index(newLine, "|")-1]
 			s.Link = link
 		}
