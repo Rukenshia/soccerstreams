@@ -8,6 +8,7 @@ GET     /                                       App.Index
 GET     /match/:thread                          App.Details
 
 GET     /clubs/:club/image                      Club.Image
+GET     /competitions/:competition/image        Competition.Image
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -19,7 +19,12 @@
     {{end}} 
 
     {{range $k, $competition := .competitions}}
-    <h3 class="subtitle is-uppercase">{{$competition.Name}}</h3>
+    <div class="level">
+      <div class="level-left">
+          <img src='/competitions/{{$competition.Identifier}}/image' class="level-item competition-image" />
+        <h3 class="level-item subtitle is-uppercase">{{$competition.Name}}</h3>
+      </div>
+    </div>
     <div class="columns is-multiline">
       {{range $competition.Matchthreads}}
       <div class="column is-4">
