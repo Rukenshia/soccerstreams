@@ -18,17 +18,17 @@
     </div>
     {{end}} 
 
-    {{range $k, $competition := .competitions}}
+    {{range .competitions}}
     <div class="level">
       <div class="level-left">
-          {{if not (eq $competition.Identifier "unknown")}}
-          <img src='/competitions/{{$competition.Identifier}}/image' class="level-item competition-image" />
+          {{if not (eq .Identifier "unknown")}}
+          <img src='/competitions/{{.Identifier}}/image' class="level-item competition-image" />
           {{end}}
-        <h3 class="level-item subtitle is-uppercase">{{$competition.Name}}</h3>
+        <h3 class="level-item subtitle is-uppercase">{{.Name}}</h3>
       </div>
     </div>
     <div class="columns is-multiline">
-      {{range $competition.Matchthreads}}
+      {{range .Matchthreads}}
       {{template "App/matchcard.html" .}}
       {{end}}
     </div>

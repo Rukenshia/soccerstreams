@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 	"time"
 
@@ -65,9 +64,6 @@ func (c App) Index() revel.Result {
 
 			go cache.Set(fmt.Sprintf("matchthread_%s", thread.DBKey()), thread, 2*time.Minute)
 		}
-
-		sort.Sort(models.ByKickoff(threads))
-		sort.Sort(models.ByHasStreams(threads))
 
 		go cache.Set("matchthreads", threads, 2*time.Minute)
 	}

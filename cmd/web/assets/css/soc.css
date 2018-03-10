@@ -16,6 +16,7 @@
 
 .matchthread-box-header.columns {
     margin-bottom: 0;
+    min-height: 18rem;
 }
 
 .matchthread-box-header > .column {
@@ -103,7 +104,7 @@
         bottom: 0;
         left: 0;
         background-image: linear-gradient(to top,
-            #000 10%,
+            #000 20%,
             transparent 100%);
 }
 

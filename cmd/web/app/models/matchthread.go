@@ -1,6 +1,7 @@
 package models
 
 import (
+	"sort"
 	"time"
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
@@ -44,7 +45,7 @@ func (b ByHasStreams) Less(i, j int) bool {
 func (b ByHasStreams) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
 
 // ByCompetition returns a map of the FrontendMatchthreads grouped by their competition
-func (f FrontendMatchthreads) ByCompetition() map[string]*Competition {
+func (f FrontendMatchthreads) ByCompetition() []*Competition {
 	competitions := make(map[string]*Competition)
 
 	for _, mt := range f {
@@ -64,5 +65,15 @@ func (f FrontendMatchthreads) ByCompetition() map[string]*Competition {
 		}
 	}
 
-	return competitions
+	var competitionsSlice []*Competition
+	for _, c := range competitions {
+		competitionsSlice = append(competitionsSlice, c)
+
+		sort.Sort(ByKickoff(c.Matchthreads))
+		sort.Sort(ByHasStreams(c.Matchthreads))
+	}
+
+	sort.Sort(ByRelevance(competitionsSlice))
+
+	return competitionsSlice
 }
