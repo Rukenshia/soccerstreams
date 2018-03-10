@@ -51,6 +51,7 @@ pipeline:
     - make lint || exit 0
 
   build-agent:
+    branch: master
     group: build
     image: golang
     environment:
@@ -63,6 +64,7 @@ pipeline:
     - cd cmd/agent && make bin
 
   build-sweeper:
+    branch: master
     group: build
     image: golang
     environment:
@@ -75,6 +77,7 @@ pipeline:
     - cd cmd/sweeper && make bin
 
   build-web:
+    branch: master
     group: build
     image: golang
     environment:
@@ -88,6 +91,7 @@ pipeline:
     - cd cmd/web && make bin
 
   docker-agent:
+    branch: master
     group: docker
     image: ruken/docker-go-gcr:latest
     pull: true
@@ -102,6 +106,7 @@ pipeline:
     - make agent
 
   docker-sweeper:
+    branch: master
     group: docker
     image: ruken/docker-go-gcr:latest
     pull: true
@@ -116,6 +121,7 @@ pipeline:
     - make sweeper
 
   docker-web:
+    branch: master
     group: docker
     image: ruken/docker-go-gcr:latest
     pull: true
@@ -131,6 +137,8 @@ pipeline:
   
   deploy:
     image: ruken/docker-gke-kubectl
+    when:
+      branch: master
     secrets:
     - source: k8s
       target: K8S_SERVICE_ACCOUNT
