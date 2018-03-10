@@ -79,9 +79,11 @@
     position: relative;
 }
 
-.has-no-streams > .overlay {
+.has-no-streams > .is-overlay {
     text-align: center;
-
+    width: 100%;
+    bottom: 3rem;
+    top: auto;
 }
 
 .matchthread-background {
