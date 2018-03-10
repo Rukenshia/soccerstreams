@@ -21,62 +21,15 @@
     {{range $k, $competition := .competitions}}
     <div class="level">
       <div class="level-left">
+          {{if not (eq $competition.Identifier "unknown")}}
           <img src='/competitions/{{$competition.Identifier}}/image' class="level-item competition-image" />
+          {{end}}
         <h3 class="level-item subtitle is-uppercase">{{$competition.Name}}</h3>
       </div>
     </div>
     <div class="columns is-multiline">
       {{range $competition.Matchthreads}}
-      <div class="column is-4">
-        <div class="box notification {{if eq (len .Streams) 0}}has-no-streams{{end}}" style="min-height: 16em">
-          <article>
-            <p class="title has-text-info is-size-5">
-              {{if .IsLive}}
-              <span class="tag is-danger" style="margin-top: -.2em">
-                LIVE
-              </span>
-              {{end}} {{if gt (len .Streams) 0}}
-              <a style="text-decoration: none" href="/match/{{.RedditID}}"> {{.Team1}} vs {{.Team2}}</a>
-              {{else}} {{.Team1}} vs {{.Team2}} {{end}}
-            </p>
-            <p class="subtitle is-size-7">Kickoff {{relative .Kickoff}} ({{.GMTKickoff}} GMT)</p>
-            <p>
-              {{if gt (len .Streams) 0}}
-              <div class="field is-grouped is-grouped-multiline">
-                <div class="control">
-                  <div class="tags has-addons">
-                    <span class="tag is-white">Acestreams</span>
-                    <span class="tag {{if gt .NumAcestreams 0}}is-success{{else}}is-danger{{end}}">{{.NumAcestreams}}</span>
-                  </div>
-                </div>
-                <div class="control">
-                  <div class="tags has-addons">
-                    <span class="tag is-white">Webstreams</span>
-                    <span class="tag {{if gt .NumWebstreams 0}}is-success{{else}}is-danger{{end}}">{{.NumWebstreams}}</span>
-                  </div>
-                </div>
-              </div>
-              {{end}}
-            </p>
-            <div class="columns is-mobile" style="align-items: center">
-              <div class="column is-one-third-mobile">
-                <img src='/clubs/{{.Team1}}/image' class="club-image" />
-              </div>
-              <div class="column is-one-third-mobile has-text-centered has-text-weight-bold">
-                vs
-              </div>
-              <div class="column is-one-third-mobile">
-                <img src='/clubs/{{.Team2}}/image' class="club-image" />
-              </div>
-            </div>
-          </article>
-          {{if eq (len .Streams) 0}}
-          <div class="overlay has-text-weight-bold">
-            no streams available
-          </div>
-          {{end}}
-        </div>
-      </div>
+      {{template "App/matchcard.html" .}}
       {{end}}
     </div>
     {{end}}

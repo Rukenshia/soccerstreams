@@ -1,0 +1,70 @@
+<div class="column is-mobile is-one-third-desktop is-half-tablet">
+  <div class="box notification {{if eq (len .Streams) 0}}has-no-streams{{end}} has-no-overflow matchthread-box" style="min-height: 26em">
+    <article>
+          <div class="columns is-mobile is-relative matchthread-box-header" style="align-items: center">
+            <div class="matchthread-background" style="background-image: url(/assets/img/mt_background{{randomNumber 1 7}}.png)"></div>
+            <div class="column is-on-top" style="display: inline-flex; justify-content: center">
+              <div class="columns is-multiline has-text-centered has-text-white has-text-weight-bold">
+                  <div class="column is-12-desktop">
+                      <img src='/clubs/{{.Team1}}/image' class="club-image" />
+                  </div>
+                  <div class="column is-12-desktop">
+                      {{.Team1}}
+                  </div>
+              </div>
+            </div>
+            <div class="column has-text-white is-narrow has-text-centered has-text-weight-bold is-on-top is-paddingless">
+              vs
+            </div>
+            <div class="column is-on-top" style="display: inline-flex; justify-content: center">
+                <div class="columns is-multiline has-text-centered has-text-white has-text-weight-bold">
+                    <div class="column is-12-desktop">
+                        <img src='/clubs/{{.Team2}}/image' class="club-image" />
+                    </div>
+                    <div class="column is-12-desktop">
+                        {{.Team2}}
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- <div class="matchthread-box-title level has-text-centered has-text-white has-text-weight-bold">
+              <div class="level-left">{{.Team1}}</div>
+              <div class="level-right">{{.Team2}}</div>
+          </div> -->
+          <div class="matchthread-box-content">
+          <p class="title is-size-7">
+            {{if .IsLive}}
+            <span class="tag is-danger" style="margin-top: -.2em">
+              LIVE
+            </span>
+            {{end}} Kickoff {{relative .Kickoff}} ({{.GMTKickoff}} GMT)</p>
+          <p>
+            {{if gt (len .Streams) 0}}
+            <div class="field is-grouped is-grouped-multiline">
+              <div class="control">
+                <div class="tags has-addons">
+                  <span class="tag is-white">Acestreams</span>
+                  <span class="tag {{if gt .NumAcestreams 0}}is-success{{else}}is-danger{{end}}">{{.NumAcestreams}}</span>
+                </div>
+              </div>
+              <div class="control">
+                <div class="tags has-addons">
+                  <span class="tag is-white">Webstreams</span>
+                  <span class="tag {{if gt .NumWebstreams 0}}is-success{{else}}is-danger{{end}}">{{.NumWebstreams}}</span>
+                </div>
+              </div>
+            </div>
+            {{end}}
+          </p>
+        </div>
+        <footer class="card-footer matchthread-box-footer">
+            <a class="card-footer-item button is-info" style="border-top-left-radius: 0; border-top-right-radius: 0" href="/match/{{.RedditID}}">Watch this game</a>
+          </footer>
+    </article>
+    {{if eq (len .Streams) 0}}
+    <div class="overlay has-text-weight-bold">
+      no streams available
+    </div>
+    {{end}}
+    </div>
+  </div>

@@ -1,11 +1,53 @@
-.background-wrapper {
+.is-relative {
     position: relative;
-    /* background: linear-gradient(to bottom right, transparent, transparent); */
+}
+
+.is-on-top {
+    z-index: 100;
+}
+
+.has-no-overflow {
+    overflow: hidden;
+}
+
+.matchthread-box {
+    padding: 0;
+}
+
+.matchthread-box-header.columns {
+    margin-bottom: 0;
+}
+
+.matchthread-box-header > .column {
+    padding: 1.25rem 2.5rem 1.25rem 2.5rem;
+}
+
+.matchthread-box-header > .column.is-narrow {
+    padding: .1rem .5rem .1rem .5rem;
+}
+
+.matchthread-box-header > .column:first-child {
+    padding-left: 1rem;
+}
+
+.matchthread-box-title {
+    margin-top: 0;
+    background-color: black;
+    padding-bottom: 1rem;
+}
+
+.matchthread-box-content {
+    padding: 1.25rem 2.5rem 3.25rem 1.5rem;
+}
+
+.matchthread-box-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .background {
     position: absolute;
-    display: box;
     left: 0;
     top: 0;
     width: 100%;
@@ -13,7 +55,7 @@
     background-image: url(/assets/img/background.png);
     background-repeat: no-repeat;
     background-position: right;
-    background-size: 80%;
+    background-size: 100%;
 }
 
 .background::after {
@@ -39,6 +81,30 @@
 .has-no-streams > .overlay {
     text-align: center;
 
+}
+
+.matchthread-background {
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: 0;
+    background-size: cover;
+}
+
+.matchthread-background::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: linear-gradient(to top,
+            #000 10%,
+            transparent 100%);
 }
 
 .has-top-spacing {

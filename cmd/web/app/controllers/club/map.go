@@ -5,6 +5,7 @@ import "regexp"
 // TODO: move this into some config file
 var simpleClubMappings = map[string]string{
 	"milan":                  "ac milan",
+	"eibar":                  "sd eibar",
 	"atlético madrid":        "atletico madrid",
 	"atalanta":               "atalanta bc",
 	"sampdoria":              "uc sampdoria",

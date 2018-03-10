@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
+	"math/rand"
 	"os"
 	"time"
 
@@ -128,6 +129,9 @@ func init() {
 	}
 	revel.TemplateFuncs["safeURL"] = func(s string) template.URL {
 		return template.URL(s)
+	}
+	revel.TemplateFuncs["randomNumber"] = func(from, to int) int {
+		return from + rand.Intn(to-from)
 	}
 
 	logger.LogFunctionMap["sentry"] = func(c *logger.CompositeMultiHandler, options *logger.LogOptions) {

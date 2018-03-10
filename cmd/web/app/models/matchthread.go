@@ -48,6 +48,11 @@ func (f FrontendMatchthreads) ByCompetition() map[string]*Competition {
 	competitions := make(map[string]*Competition)
 
 	for _, mt := range f {
+		if mt.Competition == "" {
+			mt.Competition = "unknown"
+			mt.CompetitionName = "Unknown Competition"
+		}
+
 		if _, ok := competitions[mt.Competition]; !ok {
 			competitions[mt.Competition] = &Competition{
 				Name:         mt.CompetitionName,
