@@ -6,6 +6,12 @@ import "regexp"
 var simpleClubMappings = map[string]string{
 	"braunschweig":           "eintracht braunschweig",
 	"bochum":                 "vfl bochum",
+	"hertha berlin":          "hertha bsc",
+	"hannover":               "hannover 96",
+	"freiburg":               "sc freiburg",
+	"hoffenheim":             "tsg 1899 hoffenheim",
+	"wolfsburg":              "vfl wolfsburg",
+	"augsburg":               "fc augsburg",
 	"milan":                  "ac milan",
 	"eibar":                  "sd eibar",
 	"atlético madrid":        "atletico madrid",
