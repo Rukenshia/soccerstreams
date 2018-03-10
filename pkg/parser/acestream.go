@@ -63,7 +63,10 @@ func (a *acestreamParser) parseLine(line string) *soccerstreams.Stream {
 
 		if len(candidates) > 1 {
 			// For the sake of having metrics for failed acestreams, directly report this to sentry
-			raven.Capture(logging.CreatePacket(raven.DEBUG, "Too many channel name candidates\n Candidates are: ['%s']", strings.Join(candidates, "', '")), nil)
+			raven.Capture(logging.CreatePacket(raven.DEBUG, "Too many channel name candidates\n Candidates are: ['%s']", strings.Join(candidates, "', '")), map[string]string{
+				"quality": s.Quality,
+				"rest":    rest,
+			})
 		} else if len(candidates) == 1 {
 			s.Channel = candidates[0]
 		}
