@@ -29,7 +29,7 @@ func (b ByKickoff) Len() int { return len(b) }
 func (b ByKickoff) Less(i, j int) bool {
 	now := time.Now()
 	if b[i].Kickoff.After(now) {
-		return b[i].Kickoff.Before(*b[j].Kickoff)
+		return b[i].Kickoff.After(*b[j].Kickoff)
 	}
 	return true
 }
