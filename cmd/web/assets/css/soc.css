@@ -121,3 +121,11 @@
 .competition-image {
     height: 48px;
 }
+
+.reliable-streamer {
+    position: absolute;
+}
+.reliable-streamer > svg {
+    width: 16px;
+    fill: #23d160;
+}

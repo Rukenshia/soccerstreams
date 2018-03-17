@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -38,6 +39,9 @@ func processThread(thread *models.FrontendMatchthread) {
 			thread.Webstreams = append(thread.Webstreams, stream)
 		}
 	}
+
+	sort.Sort(models.ByUpvotes(thread.Acestreams))
+	sort.Sort(models.ByUpvotes(thread.Webstreams))
 }
 
 func (c App) handleDbError(err error, baseErr *revel.Error) revel.Result {
@@ -62,10 +66,10 @@ func (c App) Index() revel.Result {
 		for _, thread := range threads {
 			processThread(thread)
 
-			go cache.Set(fmt.Sprintf("matchthread_%s", thread.DBKey()), thread, 2*time.Minute)
+			go cache.Set(fmt.Sprintf("matchthread_%s", thread.DBKey()), thread, 10*time.Second)
 		}
 
-		go cache.Set("matchthreads", threads, 2*time.Minute)
+		go cache.Set("matchthreads", threads, 1*time.Second)
 	}
 
 	moreStyles := []string{"css/soc.css"}
