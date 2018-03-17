@@ -38,6 +38,9 @@ var simpleClubMappings = map[string]string{
 	"beşiktaş":                 "besiktas",
 	"bayern munich":            "bayern munchen",
 	"brighton & hove albion":   "brighton and hove albion",
+	"udinese":                  "udinese calcio",
+	"sassuolo":                 "us sassuolo calcio",
+	"juventus":                 "juventus fc",
 }
 
 var regexClubMappings = map[string]func([]string) string{
