@@ -73,10 +73,14 @@
                 {{else}}{{.}} {{end}} {{else}}
                 <span class="has-text-danger">?</span>{{end}}
               </td>
-              <td>
+              <td class="is-hidden-mobile">
                 <a href="{{$s.Link | safeURL}}">
                   <span class="tooltip" data-tooltip="{{$s.Link}}">{{$s.Link | truncate}}</span>
                 </a>
+                <a class="button is-small is-outlined is-info" onclick="copyAcestream('acestream{{$idx}}')">Copy</a>
+              </td>
+              <td class="is-hidden-tablet">
+                <a class="button is-small is-outlined is-info" onclick="copyAcestream('acestream{{$idx}}')">Copy</a>
               </td>
               <td>
                 <span class="tooltip" data-tooltip="{{$s.Channel}}">{{$s.Channel | truncate}}</span>
@@ -90,6 +94,7 @@
                 {{end}}
               </td>
             </tr>
+            <span id="acestream{{$idx}}" href="{{$s.Link | safeURL}}" style='font-size: 1px; visibility: hidden'>{{$s.Link}}</span>
             {{end}}
           </tbody>
         </table>
@@ -106,6 +111,7 @@
               </th>
               <th>Channel Name</th>
               <th class="is-hidden-mobile">Streamer</th>
+              <th></th>
               <th></th>
             </tr>
           </thead>
@@ -140,10 +146,12 @@
                     <span class="is-hidden-mobile">&nbsp;Watch</span>
                   </a>
                 </span>
-                  <a class="button is-outlined is-dark" href="https://reddit.com{{$s.CommentLink}}">
-                    <i class="fab fa-reddit-alien"></i>
-                    <span class="is-hidden-mobile">&nbsp;perma</span>
-                  </a>
+              </td>
+              <td>
+                <a class="button is-outlined is-dark" href="https://reddit.com{{$s.CommentLink}}">
+                  <i class="fab fa-reddit-alien"></i>
+                  <span class="is-hidden-mobile">&nbsp;perma</span>
+                </a>
               </td>
             </tr>
             {{end}}
@@ -158,5 +166,28 @@
 
   </div>
 </section>
+
+<script>
+  function copyAcestream(id) {
+    const el = document.querySelector(`#${id}`);
+    el.style.visibility = 'visible';
+
+    const range = document.createRange();
+    range.selectNode(el);
+    window.getSelection().addRange(range);
+
+    try {
+      if (!document.execCommand('copy')) {
+        console.error('execCommand failed for acestream copy');
+      }
+    } catch (err) {
+      console.error('caught exception in acestream copy');
+    }
+    el.style.visibility = 'hidden';
+
+    range.detach();
+    window.getSelection().removeAllRanges();
+  }
+</script>
 
 {{template "footer.html" .}}
