@@ -53,6 +53,19 @@ func Test_threadParser_Parse(t *testing.T) {
 		{
 			args: args{
 				p: &reddit.Post{
+					Title:         "[20:05GMT] København vs Atlético Madrid",
+					LinkFlairText: "UEFA Europa League",
+				},
+			},
+			want: &soccerstreams.Matchthread{
+				Team1:   "København",
+				Team2:   "Atlético Madrid",
+				Kickoff: &gmt805pm,
+			},
+		},
+		{
+			args: args{
+				p: &reddit.Post{
 					Title:         "[20:05 GMT] Celtic vs. Zenit",
 					LinkFlairText: "UEFA Europa League",
 				},

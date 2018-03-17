@@ -44,7 +44,7 @@ func (t *threadParser) Parse(p *reddit.Post) *soccerstreams.Matchthread {
 }
 
 func (t *threadParser) parseTime(title string) (*time.Time, bool) {
-	re := regexp.MustCompile(`\[([0-2]?[0-9]):([0-5]?[0-9]) GMT\]`)
+	re := regexp.MustCompile(`\[([0-2]?[0-9]):([0-5]?[0-9])\s?GMT\]`)
 
 	groups := re.FindStringSubmatch(title)
 	if len(groups) > 0 {
