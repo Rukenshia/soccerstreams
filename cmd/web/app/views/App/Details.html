@@ -83,20 +83,12 @@
                 <span class="tooltip" data-tooltip="{{$s.Channel}}">{{$s.Channel | truncate}}</span>
               </td>
               <td class="is-hidden-mobile">
-                <div class="level">
-                  <div class="level-left">
-                    <div class="level-item">
-                      {{if $s.Metadata.ReliableStreamer}}
-                      <span class="tooltip" data-tooltip="Streamer of the Week">
-                        <i data-feather="user-check"></i>
-                      </span>
-                      {{end}}
-                    </div>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">/u/{{$s.Streamer}}</div>
-                  </div>
-                </div>
+                /u/{{$s.Streamer}}
+                {{if $s.Metadata.ReliableStreamer}}
+                <span class="tooltip has-text-success reliable-streamer" data-tooltip="Streamer of the Week">
+                  <i data-feather="star"></i>
+                </span>
+                {{end}}
               </td>
             </tr>
             {{end}}

@@ -123,9 +123,10 @@
 }
 
 .reliable-streamer {
-    position: absolute;
+    margin-left: -.2rem;
+    bottom: -7px;
 }
 .reliable-streamer > svg {
-    width: 16px;
+    width: 14px;
     fill: #23d160;
 }
