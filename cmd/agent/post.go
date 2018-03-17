@@ -31,7 +31,7 @@ func (s *Agent) Post(p *reddit.Post) error {
 
 	if mt != nil {
 		mt.SetClient(s.client)
-		mt.FillRedditInfo(p)
+		mt.FillInfo(p)
 
 		logger = logger.WithField("team1", mt.Team1).
 			WithField("team2", mt.Team2).
@@ -48,6 +48,9 @@ func (s *Agent) Post(p *reddit.Post) error {
 		}
 
 		logger.Debugf("Saved to datastore")
+
+		logger.Debugf("Start polling")
+		s.StartPolling(mt)
 		return nil
 	}
 

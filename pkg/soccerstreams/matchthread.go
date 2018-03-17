@@ -58,8 +58,8 @@ func (m *Matchthread) Delete() error {
 	return m.client.Delete(m.DBKey())
 }
 
-// FillRedditInfo uses additional information of the reddit post to populate some fields
-func (m *Matchthread) FillRedditInfo(p *reddit.Post) {
+// FillInfo uses additional information of the reddit post to populate some fields
+func (m *Matchthread) FillInfo(p *reddit.Post) {
 	m.RedditID = p.ID
 	m.Competition = p.LinkFlairCSSClass
 	m.CompetitionName = p.LinkFlairText

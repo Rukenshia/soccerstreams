@@ -90,7 +90,9 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 			}
 
 			mt.SetClient(s.client)
-			mt.FillRedditInfo(post)
+			mt.FillInfo(post)
+
+			s.StartPolling(mt)
 			logger.Debugf("Parsed matchthread %s via comment", mt.DBKey())
 		}
 

@@ -15,11 +15,12 @@ type Agent struct {
 	bot    reddit.Bot
 	client soccerstreams.DBClient
 
-	guard map[string]*sync.Mutex
+	guard   map[string]*sync.Mutex
+	polling []string
 }
 
 func NewAgent(bot reddit.Bot, client soccerstreams.DBClient) *Agent {
-	return &Agent{bot, client, make(map[string]*sync.Mutex)}
+	return &Agent{bot, client, make(map[string]*sync.Mutex), make([]string, 0)}
 }
 
 func (s *Agent) Run() error {
