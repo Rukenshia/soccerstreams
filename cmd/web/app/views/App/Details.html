@@ -74,7 +74,7 @@
                 <span class="has-text-danger">?</span>{{end}}
               </td>
               <td>
-                (+{{$s.Metadata.Upvotes}})
+                <span class="upvotes"><i data-feather="chevrons-up"></i> {{$s.Metadata.Upvotes}}</span>
                 <a href="{{$s.Link | safeURL}}">
                   <span class="tooltip" data-tooltip="{{$s.Link}}">{{$s.Link | truncate}}</span>
                 </a>
@@ -128,8 +128,9 @@
                   </span>
                 </span>
                 {{end}}
-                <span class="tooltip" data-tooltip="{{$s.Channel}}">
-                  (+{{$s.Metadata.Upvotes}}) {{$s.Channel | truncate}}</span>
+                <span class="tooltip " data-tooltip="{{$s.Channel}}">
+                <span class="upvotes"><i data-feather="chevrons-up"></i> {{$s.Metadata.Upvotes}}</span>
+                 {{$s.Channel | truncate}}</span>
               </td>
               <td class="is-hidden-mobile">
                     /u/{{$s.Streamer}}
