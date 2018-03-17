@@ -122,18 +122,6 @@
     height: 48px;
 }
 
-.reliable-streamer,.upvotes {
-    margin-left: -.2rem;
-    bottom: -7px;
-}
-
-.upvotes > svg {
-    width: 14px;
-    margin-bottom: -7px;
-    margin-right: -.2rem;
-}
-
-.reliable-streamer > svg {
-    width: 14px;
-    fill: #23d160;
+.reliable-streamer {
+    width: 18px;
 }

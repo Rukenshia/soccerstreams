@@ -74,7 +74,6 @@
                 <span class="has-text-danger">?</span>{{end}}
               </td>
               <td>
-                <span class="upvotes"><i data-feather="chevrons-up"></i> {{$s.Metadata.Upvotes}}</span>
                 <a href="{{$s.Link | safeURL}}">
                   <span class="tooltip" data-tooltip="{{$s.Link}}">{{$s.Link | truncate}}</span>
                 </a>
@@ -86,7 +85,7 @@
                 /u/{{$s.Streamer}}
                 {{if $s.Metadata.ReliableStreamer}}
                 <span class="tooltip has-text-success reliable-streamer" data-tooltip="Streamer of the Week">
-                  <i data-feather="star"></i>
+                  <i class="fas fa-star"></i>
                 </span>
                 {{end}}
               </td>
@@ -107,7 +106,6 @@
               </th>
               <th>Channel Name</th>
               <th class="is-hidden-mobile">Streamer</th>
-              <th class="is-hidden-mobile"></th>
               <th></th>
             </tr>
           </thead>
@@ -121,43 +119,31 @@
               <td>
                 {{if gt $s.Clicks 0}}
                 <span class="tag is-hidden-tablet is-danger">
-                  {{$s.Clicks}}&nbsp;
-                  <span class="icon is-small">
-                    &nbsp;
-                    <i data-feather="loader"></i>
-                  </span>
+                  {{$s.Clicks}}&nbsp;<i class="fas fa-mouse-pointer"></i>
                 </span>
                 {{end}}
                 <span class="tooltip " data-tooltip="{{$s.Channel}}">
-                <span class="upvotes"><i data-feather="chevrons-up"></i> {{$s.Metadata.Upvotes}}</span>
                  {{$s.Channel | truncate}}</span>
               </td>
               <td class="is-hidden-mobile">
-                    /u/{{$s.Streamer}}
-                    {{if $s.Metadata.ReliableStreamer}}
-                    <span class="tooltip has-text-success reliable-streamer" data-tooltip="Streamer of the Week">
-                      <i data-feather="star"></i>
-                    </span>
-                    {{end}}
-                  </div>
-                </div>
-              </td>
-              <td class="is-hidden-mobile">{{with $s.Clicks}}
-                <div class="tags has-addons">
-                  <span class="tag">Clicks</span>
-                  <span class="tag {{if eq . 0}}is-success{{else}}is-warning{{end}}">{{.}}</span>
-                </div>
+                /u/{{$s.Streamer}}
+                {{if $s.Metadata.ReliableStreamer}}
+                <span class="tooltip has-text-success reliable-streamer" data-tooltip="Streamer of the Week">
+                  <i class="fas fa-star"></i>
+                </span>
                 {{end}}
               </td>
               <td>
-                <span class="icon has-text-info">
-                  <a href="{{$s.Link}}" class="tooltip" data-tooltip="{{$s.Link}}">
-                    <i data-feather="external-link"></i>
+                <span class="has-text-info">
+                  <a href="{{$s.Link}}" class="button is-outlined is-info">
+                    <i class="fa fa-play-circle"></i>
+                    <span class="is-hidden-mobile">&nbsp;Watch</span>
                   </a>
                 </span>
-                <span class="is-small is-hidden-mobile">
-                  <a href="https://reddit.com{{$s.CommentLink}}">perma</a>
-                </span>
+                  <a class="button is-outlined is-dark" href="https://reddit.com{{$s.CommentLink}}">
+                    <i class="fab fa-reddit-alien"></i>
+                    <span class="is-hidden-mobile">&nbsp;perma</span>
+                  </a>
               </td>
             </tr>
             {{end}}
