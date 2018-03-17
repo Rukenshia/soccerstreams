@@ -29,13 +29,18 @@ func (t *ThreadPoller) Poll() chan *reddit.Post {
 	ticker := time.NewTicker(time.Minute * 2)
 	updates := make(chan *reddit.Post)
 
+	if time.Now().After(t.Kickoff.Add(time.Minute * 60)) {
+		close(updates)
+		return updates
+	}
+
 	go func() {
 		defer func() {
 			recover()
 		}()
 
 		for _ = range ticker.C {
-			if time.Now().After(t.Kickoff.Add(time.Minute * 15)) {
+			if time.Now().After(t.Kickoff.Add(time.Minute * 60)) {
 				close(updates)
 				break
 			}

@@ -43,9 +43,9 @@ func (s *Agent) StartPolling(mt *soccerstreams.Matchthread) {
 
 		pollChannel := poller.Poll()
 		for {
-			update := <-pollChannel
-			if update == nil {
-				logger.Warnf("Stopping update polling, received nil update")
+			update, ok := <-pollChannel
+			if !ok {
+				logger.Debugf("Poll thread reached EOL")
 				break
 			}
 
@@ -53,13 +53,15 @@ func (s *Agent) StartPolling(mt *soccerstreams.Matchthread) {
 			if err != nil {
 				logger.Warnf("Error while handling update: %v", err)
 				if !keepOpen {
-					logger.Warnf("-> stop handling updates")
+					logger.Warnf("-> Stop handling updates")
+					close(pollChannel)
 					break
 				}
 			}
 
 			if !keepOpen {
 				logger.Debugf("Stopping update polling, keepOpen is false. No error")
+				close(pollChannel)
 				break
 			}
 		}
