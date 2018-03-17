@@ -31,11 +31,9 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 	}
 
 	s.guard[p.ParentID].Lock()
-	logger.Debugf("Mutex lock")
 
 	defer func() {
 		s.guard[p.ParentID].Unlock()
-		logger.Debugf("Mutex unlock")
 	}()
 
 	if p.Author == "AutoModerator" {
@@ -91,12 +89,10 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 
 			mt.SetClient(s.client)
 			mt.FillInfo(post)
-
-			s.StartPolling(mt)
 			logger.Debugf("Parsed matchthread %s via comment", mt.DBKey())
 		}
 
-		logger.Debugf("Found %d new streams", len(streams))
+		s.StartPolling(mt)
 
 		hasStream := func(stream *soccerstreams.Stream) bool {
 			for _, cs := range mt.Streams {
@@ -113,10 +109,10 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 				continue
 			}
 
+			stream.FillMetadata(p)
+
 			mt.Streams = append(mt.Streams, stream)
 		}
-
-		logger.Debugf("saving updated matchthread")
 
 		if err := mt.Save(); err != nil {
 			logger.Errorf("Could not update Matchthread: %v", err)
@@ -127,8 +123,6 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 			})
 			return nil
 		}
-
-		logger.Debugf("saved updated matchthread")
 
 		return nil
 	}

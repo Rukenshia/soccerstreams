@@ -8,7 +8,6 @@ import (
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
-	log "github.com/sirupsen/logrus"
 )
 
 type acestreamParser struct{}
@@ -22,7 +21,6 @@ func (a *acestreamParser) Parse(comment string) []*soccerstreams.Stream {
 
 	for _, line := range strings.Split(comment, "\n") {
 		if stream := a.parseLine(line); stream != nil {
-			log.Debugf("Found acestream: %s", stream.Link)
 			streams = append(streams, stream)
 		}
 	}

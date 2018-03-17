@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/turnage/graw/reddit"
 )
 
@@ -41,6 +42,7 @@ func (t *ThreadPoller) Poll() chan *reddit.Post {
 
 			post, err := t.bot.Thread(t.Permalink)
 			if err != nil {
+				log.Warnf("Could not poll thread: %v", err)
 				close(updates)
 				break
 			}

@@ -38,8 +38,6 @@ func (t *threadParser) Parse(p *reddit.Post) *soccerstreams.Matchthread {
 		return nil
 	}
 
-	t.logger.Debug("parsed post successfully")
-
 	return &mt
 }
 

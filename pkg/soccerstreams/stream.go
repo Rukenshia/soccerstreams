@@ -21,7 +21,9 @@ type Stream struct {
 	MobileFriendly bool
 
 	Metadata struct {
-		Hash string
+		Hash             string
+		ReliableStreamer bool
+		Upvotes          int32
 	}
 }
 
@@ -36,5 +38,9 @@ func (s *Stream) IsGood() bool {
 
 // FillMetadata adds metadata information to the stream
 func (s *Stream) FillMetadata(c *reddit.Comment) {
+	if c.AuthorFlairCSSClass == "flair-weekly" {
+		s.Metadata.ReliableStreamer = true
+	}
 	s.Metadata.Hash = fmt.Sprintf("%x", md5.Sum([]byte(c.Body)))
+	s.Metadata.Upvotes = c.Ups
 }

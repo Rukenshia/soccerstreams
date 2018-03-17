@@ -22,11 +22,9 @@ func (s *Agent) Post(p *reddit.Post) error {
 	}
 
 	s.guard[p.ID].Lock()
-	logger.Debugf("Mutex lock")
 
 	defer func() {
 		s.guard[p.ID].Unlock()
-		logger.Debugf("Mutex unlock")
 	}()
 
 	if mt != nil {
