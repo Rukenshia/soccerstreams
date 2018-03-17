@@ -27,8 +27,6 @@ func (s *Agent) Post(p *reddit.Post) error {
 	defer func() {
 		s.guard[p.ID].Unlock()
 		logger.Debugf("Mutex unlock")
-
-		delete(s.guard, p.ID)
 	}()
 
 	if mt != nil {

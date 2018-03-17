@@ -36,7 +36,6 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 	defer func() {
 		s.guard[p.ParentID].Unlock()
 		logger.Debugf("Mutex unlock")
-		delete(s.guard, p.ParentID)
 	}()
 
 	if p.Author == "AutoModerator" {
