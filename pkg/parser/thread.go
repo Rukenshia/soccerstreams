@@ -21,8 +21,6 @@ func (t *threadParser) Parse(p *reddit.Post) *soccerstreams.Matchthread {
 		WithField("author", p.Author).
 		WithField("title", p.Title)
 
-	t.logger.Debug("parsing post")
-
 	if kickoff, is := t.parseTime(p.Title); is {
 		mt.Kickoff = kickoff
 	} else {
