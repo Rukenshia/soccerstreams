@@ -1,6 +1,8 @@
 package main
 
 import (
+	"sync"
+
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
 	"github.com/Rukenshia/soccerstreams/pkg/parser"
 	raven "github.com/getsentry/raven-go"
@@ -14,6 +16,18 @@ func (s *Agent) Post(p *reddit.Post) error {
 	logger := log.WithField("post_id", p.ID).
 		WithField("author", p.Author).
 		WithField("title", p.Title)
+
+	if _, ok := s.guard[p.ID]; !ok {
+		s.guard[p.ID] = &sync.Mutex{}
+	}
+
+	s.guard[p.ID].Lock()
+	logger.Debugf("Mutex lock")
+
+	defer func() {
+		s.guard[p.ID].Unlock()
+		logger.Debugf("Mutex unlock")
+	}()
 
 	if mt != nil {
 		mt.SetClient(s.client)

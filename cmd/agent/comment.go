@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
@@ -24,6 +25,18 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 	logger := log.WithField("comment_id", p.ID).
 		WithField("post_id", p.ParentID).
 		WithField("author", p.Author)
+
+	if _, ok := s.guard[p.ParentID]; !ok {
+		s.guard[p.ParentID] = &sync.Mutex{}
+	}
+
+	s.guard[p.ParentID].Lock()
+	logger.Debugf("Mutex lock")
+
+	defer func() {
+		s.guard[p.ParentID].Unlock()
+		logger.Debugf("Mutex unlock")
+	}()
 
 	if p.Author == "AutoModerator" {
 		handled, err := s.handleAutoModComment(p)
@@ -53,7 +66,8 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 			logger.Debugf("Grabbing matchthread from database failed, attempting on-demand parse")
 
 			// try to just grab it NOW
-			if post, err := s.bot.Thread(fmt.Sprintf("/r/soccerstreams/comments/%s", postID)); err != nil {
+			post, err := s.bot.Thread(fmt.Sprintf("/r/soccerstreams/comments/%s", postID))
+			if err != nil {
 				logger.Errorf("Could not parse matchthread from Comment: %v, thread id %s", err, postID)
 
 				raven.CaptureError(err, map[string]string{
@@ -61,24 +75,23 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 					"CommentID": p.ID,
 				})
 				return nil
-			} else {
-				mt = parser.ParsePost(post)
-				if mt == nil {
-					logger.Errorf("Unable to parse matchthread from comment")
-					raven.Capture(
-						logging.CreatePacket(raven.DEBUG, "Unable to parse matchthread from comment\nPermalink: https://reddit.com%s\nTitle: %s\nFlair: %s", post.Permalink, post.Title, post.LinkFlairText),
-						map[string]string{
-							"Author": post.Author,
-							"PostID": post.ID,
-						})
-
-					return nil
-				}
-
-				mt.SetClient(s.client)
-				mt.FillRedditInfo(post)
-				logger.Debugf("Parsed matchthread %s via comment", mt.DBKey())
 			}
+			mt = parser.ParsePost(post)
+			if mt == nil {
+				logger.Errorf("Unable to parse matchthread from comment")
+				raven.Capture(
+					logging.CreatePacket(raven.DEBUG, "Unable to parse matchthread from comment\nPermalink: https://reddit.com%s\nTitle: %s\nFlair: %s", post.Permalink, post.Title, post.LinkFlairText),
+					map[string]string{
+						"Author": post.Author,
+						"PostID": post.ID,
+					})
+
+				return nil
+			}
+
+			mt.SetClient(s.client)
+			mt.FillRedditInfo(post)
+			logger.Debugf("Parsed matchthread %s via comment", mt.DBKey())
 		}
 
 		logger.Debugf("Found %d new streams", len(streams))
