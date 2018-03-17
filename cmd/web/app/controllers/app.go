@@ -40,11 +40,8 @@ func processThread(thread *models.FrontendMatchthread) {
 		}
 	}
 
-	sort.Sort(models.ByUpvotes(thread.Acestreams))
-	sort.Sort(models.ByUpvotes(thread.Webstreams))
-
-	sort.Sort(models.ByStreamerOfTheWeek(thread.Acestreams))
-	sort.Sort(models.ByStreamerOfTheWeek(thread.Webstreams))
+	sort.Sort(models.ByStreamRelevance(thread.Acestreams))
+	sort.Sort(models.ByStreamRelevance(thread.Webstreams))
 }
 
 func (c App) handleDbError(err error, baseErr *revel.Error) revel.Result {
