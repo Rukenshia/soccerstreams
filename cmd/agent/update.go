@@ -121,7 +121,7 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 		}
 
 		// Update upvotes
-		if commentStreams[0].Metadata.Upvotes > c.Ups {
+		if c.Ups != commentStreams[0].Metadata.Upvotes {
 			updated = true
 
 			for _, cs := range commentStreams {
