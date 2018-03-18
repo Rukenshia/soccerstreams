@@ -45,6 +45,9 @@ var simpleClubMappings = map[string]string{
 	"duisburg":                 "msv duisburg",
 	"leganes":                  "cd leganés",
 	"nice":                     "ogc nice",
+	"fc koln":                  "fc köln",
+	"ath bilbao":               "athletic bilbao",
+	"villareal":                "villareal cf",
 }
 
 var regexClubMappings = map[string]func([]string) string{
