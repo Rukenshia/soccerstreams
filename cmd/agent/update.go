@@ -79,7 +79,7 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 	logger := log.WithField("post_id", postID).
 		WithField("polling", true)
 
-	if post.Deleted || post.Hidden {
+	if post.Deleted || post.Hidden || post.SelfText == "[removed]" {
 		logger.Debugf("Thread has been deleted or hidden, removing from database")
 		if err := mt.Delete(); err != nil {
 			logger.Debugf("Could not delete matchthread: %v", err)
@@ -99,7 +99,7 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 		streamLogger := logger.WithField("comment_id", c.ID).
 			WithField("author", c.Author)
 
-		if c.Deleted {
+		if c.Deleted || c.Body == "[removed]" {
 			streamLogger.Debugf("Comment was deleted. Removing streams")
 			continue
 		}
