@@ -24,7 +24,7 @@
           <a style="text-decoration: none" href="https://reddit.com/r/soccerstreams/comments/{{.RedditID}}">{{.Team1}} vs {{.Team2}}</a>
         </p>
         <p>
-          {{if gt (len .Streams) 0}}
+          {{if gt .NumStreams 0}}
           <div class="field is-grouped is-grouped-multiline">
             <div class="control">
               <div class="tags has-addons">

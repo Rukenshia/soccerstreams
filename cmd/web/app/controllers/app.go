@@ -32,10 +32,12 @@ func processThread(thread *models.FrontendMatchthread) {
 		for _, stream := range comment.Streams {
 			if strings.Contains(stream.Link, "acestream://") {
 				thread.NumAcestreams++
+				thread.NumStreams++
 
 				thread.Acestreams = append(thread.Acestreams, stream)
 			} else {
 				thread.NumWebstreams++
+				thread.NumStreams++
 
 				thread.Webstreams = append(thread.Webstreams, stream)
 			}
