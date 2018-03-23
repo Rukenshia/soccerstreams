@@ -1,5 +1,5 @@
 <div class="column is-mobile is-one-third-desktop is-half-tablet">
-  <div class="box notification {{if eq (len .Streams) 0}}has-no-streams{{end}} has-no-overflow matchthread-box" style="min-height: 26em">
+  <div class="box notification {{if and (eq (len .Webstreams) 0) (eq (len .Acestreams) 0)}}has-no-streams{{end}} has-no-overflow matchthread-box" style="min-height: 26em">
     <article>
           <div class="columns is-mobile is-relative matchthread-box-header" style="align-items: center">
             <div class="matchthread-background" style="background-image: url(/assets/img/mt_background{{randomNumber 1 7}}.png)"></div>
@@ -35,7 +35,6 @@
             </span>
             {{end}} Kickoff {{relative .Kickoff}} ({{.GMTKickoff}} GMT)</p>
           <p>
-            {{if gt (len .Streams) 0}}
             <div class="field is-grouped is-grouped-multiline">
               <div class="control">
                 <div class="tags has-addons">
@@ -50,14 +49,13 @@
                 </div>
               </div>
             </div>
-            {{end}}
           </p>
         </div>
         <footer class="card-footer matchthread-box-footer">
             <a class="card-footer-item button is-info" style="border-top-left-radius: 0; border-top-right-radius: 0" href="/match/{{.RedditID}}">Watch this game</a>
           </footer>
     </article>
-    {{if eq (len .Streams) 0}}
+    {{if and (eq (len .Acestreams) 0) (eq (len .Webstreams) 0)}}
     <div class="is-overlay has-text-weight-bold">
       no streams available
     </div>

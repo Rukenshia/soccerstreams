@@ -2,8 +2,6 @@ package soccerstreams
 
 import (
 	"time"
-
-	"github.com/turnage/graw/reddit"
 )
 
 // Matchthread represents a reddit thread containing Streams.
@@ -14,7 +12,7 @@ type Matchthread struct {
 	Competition     string
 	CompetitionName string
 	Kickoff         *time.Time
-	Streams         []*Stream
+	Comments        []*Comment
 
 	UpdatedAt time.Time
 	ExpiresAt time.Time
@@ -40,9 +38,21 @@ func (m *Matchthread) DBKey() string {
 	return m.RedditID
 }
 
-// SetExpiresAt sets the Matchthreads expiry time. A football game usually takes 1 1/2 hours so we give it a buffer of another hour
+// AddComment adds a Comment to a Matchthread if it does not exist yet
+func (m *Matchthread) AddComment(c *Comment) bool {
+	for _, ec := range m.Comments {
+		if ec.RedditID == c.RedditID {
+			return false
+		}
+	}
+
+	m.Comments = append(m.Comments, c)
+	return true
+}
+
+// UpdateExpiresAt sets the Matchthreads expiry time. A football game usually takes 1 1/2 hours so we give it a buffer of another hour
 // after kickoff
-func (m *Matchthread) SetExpiresAt() {
+func (m *Matchthread) UpdateExpiresAt() {
 	m.ExpiresAt = m.Kickoff.Add(time.Hour*2 + time.Minute*30)
 }
 
@@ -56,12 +66,4 @@ func (m *Matchthread) Save() error {
 // Delete deletes the matchthread
 func (m *Matchthread) Delete() error {
 	return m.client.Delete(m.DBKey())
-}
-
-// FillInfo uses additional information of the reddit post to populate some fields
-func (m *Matchthread) FillInfo(p *reddit.Post) {
-	m.RedditID = p.ID
-	m.Competition = p.LinkFlairCSSClass
-	m.CompetitionName = p.LinkFlairText
-	m.SetExpiresAt()
 }

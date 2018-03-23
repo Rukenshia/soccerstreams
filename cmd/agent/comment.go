@@ -49,7 +49,7 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 		}
 	}
 
-	streams := parser.ParseComment(p)
+	streams := parser.ParseComment(p.Body)
 	if len(streams) > 0 {
 		// Find the matchthread in datastore
 		// We are not making this in a goroutine because there might be other
@@ -88,30 +88,23 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 			}
 
 			mt.SetClient(s.client)
-			mt.FillInfo(post)
+			FillMatchthreadInfo(mt, post)
+			mt.UpdateExpiresAt()
 			logger.Debugf("Parsed matchthread %s via comment", mt.DBKey())
 		}
 
 		s.StartPolling(mt)
 
-		hasStream := func(stream *soccerstreams.Stream) bool {
-			for _, cs := range mt.Streams {
-				if cs.Link == stream.Link {
-					return true
-				}
-			}
-			return false
+		comment := &soccerstreams.Comment{
+			Streams: streams,
 		}
 
-		for _, stream := range streams {
-			if hasStream(stream) {
-				logger.Debugf("Skipping duplicate stream")
-				continue
-			}
+		FillCommentInfo(comment, p)
+		comment.UpdateHash()
 
-			stream.FillMetadata(p)
-
-			mt.Streams = append(mt.Streams, stream)
+		if added := mt.AddComment(comment); !added {
+			// Not adding duplicated comment
+			return nil
 		}
 
 		if err := mt.Save(); err != nil {

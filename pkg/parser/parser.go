@@ -13,7 +13,7 @@ type PostParser interface {
 	Parse(*reddit.Post) *soccerstreams.Matchthread
 }
 
-func ParseComment(c *reddit.Comment) []*soccerstreams.Stream {
+func ParseComment(comment string) []*soccerstreams.Stream {
 	parsers := []CommentParser{
 		&singleStreamParser{},
 		&acestreamParser{},
@@ -22,13 +22,7 @@ func ParseComment(c *reddit.Comment) []*soccerstreams.Stream {
 	var s []*soccerstreams.Stream
 
 	for _, parser := range parsers {
-		s = append(s, parser.Parse(c.Body)...)
-	}
-
-	// fill comment info
-	for _, stream := range s {
-		stream.CommentLink = c.Permalink
-		stream.Streamer = c.Author
+		s = append(s, parser.Parse(comment)...)
 	}
 
 	return s

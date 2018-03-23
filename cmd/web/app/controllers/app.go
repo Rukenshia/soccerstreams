@@ -28,20 +28,22 @@ func processThread(thread *models.FrontendMatchthread) {
 	thread.GMTKickoff = gmtKickoff.Format("15:04")
 	thread.Kickoff = &gmtKickoff
 
-	for _, stream := range thread.Streams {
-		if strings.Contains(stream.Link, "acestream://") {
-			thread.NumAcestreams++
+	for _, comment := range thread.Comments {
+		for _, stream := range comment.Streams {
+			if strings.Contains(stream.Link, "acestream://") {
+				thread.NumAcestreams++
 
-			thread.Acestreams = append(thread.Acestreams, stream)
-		} else {
-			thread.NumWebstreams++
+				thread.Acestreams = append(thread.Acestreams, stream)
+			} else {
+				thread.NumWebstreams++
 
-			thread.Webstreams = append(thread.Webstreams, stream)
+				thread.Webstreams = append(thread.Webstreams, stream)
+			}
 		}
 	}
 
-	sort.Sort(models.ByStreamRelevance(thread.Acestreams))
-	sort.Sort(models.ByStreamRelevance(thread.Webstreams))
+	sort.Sort(models.ByCommentRelevance(thread.Comments))
+	sort.Sort(models.ByCommentRelevance(thread.Comments))
 }
 
 func (c App) handleDbError(err error, baseErr *revel.Error) revel.Result {
