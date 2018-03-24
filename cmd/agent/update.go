@@ -19,14 +19,14 @@ func (s *Agent) StartPolling(mt *soccerstreams.Matchthread) {
 	logger := log.WithField("post_id", mt.RedditID).
 		WithField("polling", true)
 
-	metrics.PostsPolling.Inc()
-
 	for _, p := range s.polling {
 		if p == mt.RedditID {
 			// We are already polling this thread; no further action required
 			return
 		}
 	}
+
+	metrics.PostsPolling.Inc()
 
 	go func() {
 		defer func() {
