@@ -1,30 +1,40 @@
 package models
 
-import "github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
+import (
+	"strings"
 
-// ByStreamRelevance combines ByUpvotes and StreamerOfTheWeek sorts
-type ByStreamRelevance []*soccerstreams.Stream
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
+)
 
-func (b ByStreamRelevance) Len() int { return len(b) }
+var qualities = map[string]int{
+	// lower = better
+	"HD":    0,
+	"1080p": 1,
+	"720":   2,
+	"720p":  3,
+	"SD":    4,
+}
 
-// Less determines which stream is more relevant. The most relevant stream is a SOTW with the most upvotes.
-// All other SOTW follow, afterwards non-SOTW Streams follow sorted by decreasing Upvotes.
-func (b ByStreamRelevance) Less(i, j int) bool {
-	if b[i].Metadata.ReliableStreamer {
-		if ByUpvotes(b).Less(j, i) && b[j].Metadata.ReliableStreamer {
-			return false
-		}
+// ByQuality sorts streams by their quality. If no relevancy is defined, they are compared lexicographically
+type ByQuality []*soccerstreams.Stream
+
+func (b ByQuality) Len() int { return len(b) }
+func (b ByQuality) Less(i, j int) bool {
+	iRel, iIsRel := qualities[b[i].Quality]
+	jRel, jIsRel := qualities[b[j].Quality]
+
+	if iIsRel && jIsRel {
+		return iRel < jRel
+	}
+
+	if iIsRel {
 		return true
 	}
-	return ByUpvotes(b).Less(i, j)
-}
-func (b ByStreamRelevance) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
 
-// ByUpvotes sorts the Streams by number of Upvotes
-type ByUpvotes []*soccerstreams.Stream
+	if jIsRel {
+		return false
+	}
 
-func (b ByUpvotes) Len() int { return len(b) }
-func (b ByUpvotes) Less(i, j int) bool {
-	return b[i].Metadata.Upvotes > b[j].Metadata.Upvotes
+	return strings.Compare(b[i].Quality, b[j].Quality) < 1
 }
-func (b ByUpvotes) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+func (b ByQuality) Swap(i, j int) { b[i], b[j] = b[j], b[i] }

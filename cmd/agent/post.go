@@ -29,7 +29,8 @@ func (s *Agent) Post(p *reddit.Post) error {
 
 	if mt != nil {
 		mt.SetClient(s.client)
-		mt.FillInfo(p)
+		FillMatchthreadInfo(mt, p)
+		mt.UpdateExpiresAt()
 
 		logger = logger.WithField("team1", mt.Team1).
 			WithField("team2", mt.Team2).

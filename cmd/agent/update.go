@@ -92,8 +92,8 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 		}
 	}
 
-	var updated = false
-	var streams []*soccerstreams.Stream
+	updated := false
+	var comments []*soccerstreams.Comment
 
 	for _, c := range post.Replies {
 		streamLogger := logger.WithField("comment_id", c.ID).
@@ -104,67 +104,52 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 			continue
 		}
 
-		// Find all streams for this comment
-		var commentStreams []*soccerstreams.Stream
-
-		for _, stream := range mt.Streams {
-			if stream.CommentLink == c.Permalink {
-				commentStreams = append(commentStreams, stream)
+		// Find comment in matchthread
+		var existing *soccerstreams.Comment
+		for _, ec := range mt.Comments {
+			if ec.RedditID == c.ID {
+				existing = ec
 			}
 		}
 
-		// Next, if we have any streams, check if the Hash changed.
-		// FIXME: This is where a design flaw of having flat Streams in a Matchthread shows.
-		// 		  When we detect the first stream with a Hash change, we will have to get rid of
-		//		  all streams and parse them again. I don't like this and maybe we should switch
-		//		  to using Matchthread -> Comment -> Streams.
-		if len(commentStreams) == 0 {
+		if existing == nil {
+			// We don't know this comment so let's not bother
 			continue
 		}
 
-		// Update upvotes
-		if c.Ups != commentStreams[0].Metadata.Upvotes {
-			updated = true
-
-			for _, cs := range commentStreams {
-				cs.Metadata.Upvotes = c.Ups
-			}
-		}
-
-		// Check stream for changes
+		// Check comment for changes
 		hash := fmt.Sprintf("%x", md5.Sum([]byte(c.Body)))
-		if hash == commentStreams[0].Metadata.Hash {
-			streams = append(streams, commentStreams...)
+		if hash == existing.BodyHash {
+			comments = append(comments, existing)
+
+			// Check if Upvotes changed to mark the Matchthread as updated
+			if existing.Upvotes != c.Ups {
+				FillCommentInfo(existing, c)
+				updated = true
+			}
 			continue
 		}
 
 		updated = true
 
 		streamLogger.WithFields(log.Fields{
-			"old": commentStreams[0].Metadata.Hash,
+			"old": existing.BodyHash,
 			"new": hash,
 		}).Debugf("Comment hash changed, updating all streams")
 
-		newStreams := parser.ParseComment(c)
+		existing.Streams = parser.ParseComment(c.Body)
+		FillCommentInfo(existing, c)
 
-		for _, ns := range newStreams {
-			ns.FillMetadata(c)
-		}
-
-		streamLogger.WithFields(log.Fields{
-			"old": len(commentStreams),
-			"new": len(newStreams),
-		}).Debugf("Adding new streams after comment hash change")
-		streams = append(streams, newStreams...)
+		comments = append(comments, existing)
 	}
 
 	if updated {
 		logger.WithFields(log.Fields{
-			"streams_before": len(mt.Streams),
-			"streams_after":  len(streams),
+			"comments_before": len(mt.Comments),
+			"comments_after":  len(comments),
 		}).Debugf("Updating matchthread after polling update")
 
-		mt.Streams = streams
+		mt.Comments = comments
 		if err := mt.Save(); err != nil {
 			logger.Errorf("Could not save matchthread: %v", err)
 			return true, err

@@ -32,16 +32,18 @@ func TestCommentSingleWebstream(t *testing.T) {
 		Body:                "**HD** | [ENGLISH TSN4 1080p] (http://foundationsports.com/crvcsk/) | MISR : 3mbps | Ad Overlay : 1 | Clicks : 2  | Mobile : Yes",
 	}))
 
-	assert.Len(t, mt.Streams, 1)
+	assert.Len(t, mt.Comments, 1)
+	assert.Len(t, mt.Comments[0].Streams, 1)
 
-	s := mt.Streams[0]
+	c := mt.Comments[0]
+	s := mt.Comments[0].Streams[0]
 
 	assert.Equal(t, "ENGLISH TSN4 1080p", s.Channel)
 	assert.Equal(t, "HD", s.Quality)
 	assert.Equal(t, "3mbps", s.MISR)
 	assert.Equal(t, 2, s.Clicks)
-	assert.Equal(t, "testuser", s.Streamer)
+	assert.Equal(t, "testuser", c.Streamer)
 	assert.True(t, s.MobileFriendly)
-	assert.True(t, s.Metadata.ReliableStreamer)
-	assert.Equal(t, int32(1), s.Metadata.Upvotes)
+	assert.True(t, c.ReliableStreamer)
+	assert.Equal(t, int32(1), c.Upvotes)
 }

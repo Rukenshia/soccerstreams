@@ -1,0 +1,33 @@
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      {{len .Webstreams}} stream{{if gt (len .Streams) 1}}s{{end}} by /u/{{.Streamer}}
+    </p>
+    <span class="card-header-icon" style="cursor: inherit">
+      <span class="icon">
+        <i class="fas fa-angle-double-up" aria-hidden="true"></i>
+        &nbsp;{{.Upvotes}}
+      </span>&nbsp; {{if .ReliableStreamer}}
+      <span class="tag is-success">
+        <i class="fas fa-star"></i>&nbsp;Reliable</span>
+      {{end}}
+    </span>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <ul>
+      {{range .Webstreams}}
+      <li>
+        {{if eq .Quality "HD"}}<strong>{{end}}
+        {{.Quality}}
+        {{if eq .Quality "HD"}}</strong>{{end}}
+        stream (Channel: {{.Channel}})
+        {{end}}
+      </li>
+      </ul>
+    </div>
+  </div>
+  <footer class="card-footer">
+    <a href="https://reddit.com/{{.Permalink}}" class="card-footer-item button is-info" style="border-top-left-radius: 0; border-top-right-radius: 0">Watch now</a>
+  </footer>
+</div>

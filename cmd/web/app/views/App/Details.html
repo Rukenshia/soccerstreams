@@ -24,7 +24,7 @@
           <a style="text-decoration: none" href="https://reddit.com/r/soccerstreams/comments/{{.RedditID}}">{{.Team1}} vs {{.Team2}}</a>
         </p>
         <p>
-          {{if gt (len .Streams) 0}}
+          {{if gt .NumStreams 0}}
           <div class="field is-grouped is-grouped-multiline">
             <div class="control">
               <div class="tags has-addons">
@@ -45,120 +45,32 @@
               </div>
             </div>
           </div>
-          <div class="notification is-warning has-top-spacing">
-            If you enjoy a stream, please upvote it on reddit! You can get to the comment by clicking on
-            <a class="button is-outlined is-dark"><i class="fab fa-reddit-alien"></i>&nbsp;<span class="is-hidden-mobile">perma</span></a>
-          </div>
           {{end}}
         </p>
-        {{if gt .NumAcestreams 0}}
-        <p class="title is-2 has-top-spacing">
-          Acestreams
-        </p>
-        <table class="table is-striped">
-          <thead>
-            <tr>
-              <th>
-                <abbr title="Quality">Q</abbr>
-              </th>
-              <th>Link</th>
-              <th>Channel Name</th>
-              <th class="is-hidden-mobile">Streamer</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{range $idx, $s := .Acestreams}}
-            <tr>
-              <td>{{with $s.Quality}} {{if eq . "HD"}}
-                <span class="has-text-weight-bold">HD</span>
-                {{else}}{{.}} {{end}} {{else}}
-                <span class="has-text-danger">?</span>{{end}}
-              </td>
-              <td class="is-hidden-mobile">
-                <a href="{{$s.Link | safeURL}}">
-                  <span class="tooltip" data-tooltip="{{$s.Link}}">{{$s.Link | truncate}}</span>
-                </a>
-                <a class="button is-small is-outlined is-info" onclick="copyAcestream('acestream{{$idx}}')">Copy</a>
-              </td>
-              <td class="is-hidden-tablet">
-                <a class="button is-small is-outlined is-info" onclick="copyAcestream('acestream{{$idx}}')">Copy</a>
-              </td>
-              <td>
-                <span class="tooltip" data-tooltip="{{$s.Channel}}">{{$s.Channel | truncate}}</span>
-              </td>
-              <td class="is-hidden-mobile">
-                /u/{{$s.Streamer}}
-                {{if $s.Metadata.ReliableStreamer}}
-                <span class="tooltip has-text-success reliable-streamer" data-tooltip="Streamer of the Week">
-                  <i class="fas fa-star"></i>
-                </span>
-                {{end}}
-              </td>
-            </tr>
-            <span id="acestream{{$idx}}" href="{{$s.Link | safeURL}}" style='font-size: 1px; visibility: hidden'>{{$s.Link}}</span>
-            {{end}}
-          </tbody>
-        </table>
-        {{end}} {{if gt .NumWebstreams 0}}
-        <p class="title is-2 has-top-spacing">
-          Webstreams
-        </p>
-        <p class="subtitle is-hidden-tablet">Mobile friendly only</p>
-        <table class="table is-striped">
-          <thead>
-            <tr>
-              <th>
-                <abbr title="Quality">Q</abbr>
-              </th>
-              <th>Channel Name</th>
-              <th class="is-hidden-mobile">Streamer</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {{range $idx, $s := .Webstreams}}
-            <tr class="{{if not $s.MobileFriendly}}is-hidden-mobile{{end}}">
-              <td>{{with $s.Quality}} {{if eq . "HD"}}
-                <span class="has-text-weight-bold">HD</span>
-                {{else}}{{.}} {{end}} {{else}}
-                <span class="has-text-danger">?</span>{{end}}</td>
-              <td>
-                {{if gt $s.Clicks 0}}
-                <span class="tag is-hidden-tablet is-danger">
-                  {{$s.Clicks}}&nbsp;<i class="fas fa-mouse-pointer"></i>
-                </span>
-                {{end}}
-                <span class="tooltip " data-tooltip="{{$s.Channel}}">
-                 {{$s.Channel | truncate}}</span>
-              </td>
-              <td class="is-hidden-mobile">
-                /u/{{$s.Streamer}}
-                {{if $s.Metadata.ReliableStreamer}}
-                <span class="tooltip has-text-success reliable-streamer" data-tooltip="Streamer of the Week">
-                  <i class="fas fa-star"></i>
-                </span>
-                {{end}}
-              </td>
-              <td>
-                <span class="has-text-info">
-                  <a href="{{$s.Link}}" class="button is-outlined is-info">
-                    <i class="fa fa-play-circle"></i>
-                    <span class="is-hidden-mobile">&nbsp;Watch</span>
-                  </a>
-                </span>
-              </td>
-              <td>
-                <a class="button is-outlined is-dark" href="https://reddit.com{{$s.CommentLink}}">
-                  <i class="fab fa-reddit-alien"></i>
-                  <span class="is-hidden-mobile">&nbsp;perma</span>
-                </a>
-              </td>
-            </tr>
-            {{end}}
-          </tbody>
-        </table>
+        <p class="title is-2">Acestreams</p>
+        <div class="columns is-multiline">
+        {{range .Comments}}
+        {{if gt (len .Acestreams) 0}}
+        <div class="column is-mobile is-one-third-desktop is-half-tablet">
+        {{template "App/ace_comment.html" .}}
+        </div>
         {{end}}
+        {{end}}
+        </div>
+
+        <p class="title is-2">Webstreams</p>
+        <div class="columns is-multiline">
+        {{range .Comments}}
+        {{if gt (len .Webstreams) 0}}
+        <div class="column is-mobile is-one-third-desktop is-half-tablet">
+        {{template "App/web_comment.html" .}}
+        </div>
+        <div class="column is-mobile is-one-third-desktop is-half-tablet">
+        {{template "App/web_comment.html" .}}
+        </div>
+        {{end}}
+        {{end}}
+        </div>
       </div>
     </div>
     {{end}}
@@ -167,28 +79,5 @@
 
   </div>
 </section>
-
-<script>
-  function copyAcestream(id) {
-    const el = document.querySelector(`#${id}`);
-    el.style.visibility = 'visible';
-
-    const range = document.createRange();
-    range.selectNode(el);
-    window.getSelection().addRange(range);
-
-    try {
-      if (!document.execCommand('copy')) {
-        console.error('execCommand failed for acestream copy');
-      }
-    } catch (err) {
-      console.error('caught exception in acestream copy');
-    }
-    el.style.visibility = 'hidden';
-
-    range.detach();
-    window.getSelection().removeAllRanges();
-  }
-</script>
 
 {{template "footer.html" .}}

@@ -11,12 +11,14 @@ import (
 type FrontendMatchthread struct {
 	*soccerstreams.Matchthread
 
-	GMTKickoff    string
-	IsLive        bool
+	Comments []*FrontendComment
+
+	GMTKickoff string
+	IsLive     bool
+
+	NumStreams    int
 	NumAcestreams int
 	NumWebstreams int
-	Acestreams    []*soccerstreams.Stream
-	Webstreams    []*soccerstreams.Stream
 }
 
 // FrontendMatchthreads represents a slice of FrontendMatchthread
@@ -35,14 +37,14 @@ func (b ByKickoff) Less(i, j int) bool {
 }
 func (b ByKickoff) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
 
-// ByHasStreams sorts FrontendMatchthreads by whether they have a stream or not.
-type ByHasStreams FrontendMatchthreads
+// ByHasComments sorts FrontendMatchthreads by whether they have a stream or not.
+type ByHasComments FrontendMatchthreads
 
-func (b ByHasStreams) Len() int { return len(b) }
-func (b ByHasStreams) Less(i, j int) bool {
-	return len(b[i].Streams) > 0
+func (b ByHasComments) Len() int { return len(b) }
+func (b ByHasComments) Less(i, j int) bool {
+	return b[i].NumAcestreams > 0 || b[i].NumWebstreams > 0
 }
-func (b ByHasStreams) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+func (b ByHasComments) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
 
 // ByCompetition returns a map of the FrontendMatchthreads grouped by their competition
 func (f FrontendMatchthreads) ByCompetition() []*Competition {
@@ -70,7 +72,7 @@ func (f FrontendMatchthreads) ByCompetition() []*Competition {
 		competitionsSlice = append(competitionsSlice, c)
 
 		sort.Sort(ByKickoff(c.Matchthreads))
-		sort.Sort(ByHasStreams(c.Matchthreads))
+		sort.Sort(ByHasComments(c.Matchthreads))
 	}
 
 	sort.Sort(ByRelevance(competitionsSlice))
