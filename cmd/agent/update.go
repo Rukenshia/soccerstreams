@@ -4,6 +4,8 @@ import (
 	"crypto/md5"
 	"fmt"
 
+	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
+
 	"github.com/Rukenshia/soccerstreams/pkg/parser"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
@@ -16,6 +18,8 @@ func (s *Agent) StartPolling(mt *soccerstreams.Matchthread) {
 
 	logger := log.WithField("post_id", mt.RedditID).
 		WithField("polling", true)
+
+	metrics.PostsPolling.Inc()
 
 	for _, p := range s.polling {
 		if p == mt.RedditID {
@@ -34,7 +38,7 @@ func (s *Agent) StartPolling(mt *soccerstreams.Matchthread) {
 				}
 			}
 
-			logger.Debugf("Stopped polling")
+			metrics.PostsPolling.Dec()
 		}()
 
 		poller := NewThreadPoller(fmt.Sprintf("/r/soccerstreams/comments/%s", mt.RedditID), *mt.Kickoff, s.bot)
@@ -80,6 +84,8 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 		WithField("polling", true)
 
 	if post.Deleted || post.Hidden || post.SelfText == "[removed]" {
+		metrics.PostsDeleted.Inc()
+
 		logger.Debugf("Thread has been deleted or hidden, removing from database")
 		if err := mt.Delete(); err != nil {
 			logger.Debugf("Could not delete matchthread: %v", err)
@@ -99,11 +105,6 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 		streamLogger := logger.WithField("comment_id", c.ID).
 			WithField("author", c.Author)
 
-		if c.Deleted || c.Body == "[removed]" {
-			streamLogger.Debugf("Comment was deleted. Removing streams")
-			continue
-		}
-
 		// Find comment in matchthread
 		var existing *soccerstreams.Comment
 		for _, ec := range mt.Comments {
@@ -114,6 +115,13 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 
 		if existing == nil {
 			// We don't know this comment so let's not bother
+			continue
+		}
+
+		if c.Deleted || c.Body == "[removed]" {
+			metrics.CommentsDeleted.Inc()
+
+			streamLogger.Debugf("Comment was deleted. Removing streams")
 			continue
 		}
 
@@ -144,6 +152,8 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 	}
 
 	if updated {
+		metrics.CommentsChanged.Inc()
+
 		logger.WithFields(log.Fields{
 			"comments_before": len(mt.Comments),
 			"comments_after":  len(comments),

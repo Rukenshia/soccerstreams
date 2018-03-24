@@ -5,6 +5,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
+
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
@@ -17,6 +19,8 @@ import (
 
 // Comment parses a new reddit comment
 func (s *Agent) Comment(p *reddit.Comment) error {
+	metrics.CommentsIngested.Inc()
+
 	// We only care about top level comments
 	if !p.IsTopLevel() {
 		return nil
@@ -44,6 +48,7 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 		}
 
 		if handled {
+			metrics.CommentsDeleted.Inc()
 			logger.Debugf("Backing off parsing comment, automoderator took action")
 			return nil
 		}
@@ -51,6 +56,8 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 
 	streams := parser.ParseComment(p.Body)
 	if len(streams) > 0 {
+		metrics.CommentsParsed.Inc()
+
 		// Find the matchthread in datastore
 		// We are not making this in a goroutine because there might be other
 		// comments at the same time, breaking our Update for the datastore entry

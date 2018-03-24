@@ -3,6 +3,8 @@ package main
 import (
 	"sync"
 
+	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
+
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
 	"github.com/Rukenshia/soccerstreams/pkg/parser"
 	raven "github.com/getsentry/raven-go"
@@ -11,6 +13,8 @@ import (
 )
 
 func (s *Agent) Post(p *reddit.Post) error {
+	metrics.PostsIngested.Inc()
+
 	mt := parser.ParsePost(p)
 
 	logger := log.WithField("post_id", p.ID).
@@ -36,8 +40,7 @@ func (s *Agent) Post(p *reddit.Post) error {
 			WithField("team2", mt.Team2).
 			WithField("kickoff", mt.Kickoff.Format("15:04"))
 
-		logger.Debugf("Parsed matchthread")
-		logger.Debugf("Saving to datastore")
+		metrics.PostsParsed.Inc()
 
 		if err := mt.Save(); err != nil {
 			raven.CaptureError(err, map[string]string{

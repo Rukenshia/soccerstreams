@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
@@ -27,6 +28,11 @@ func main() {
 	}
 
 	agent := NewAgent(bot, client)
+
+	go func() {
+		metrics.Register()
+		log.Error(metrics.Serve())
+	}()
 
 	if err := agent.Run(); err != nil {
 		raven.CaptureErrorAndWait(err, nil)
