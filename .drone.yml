@@ -53,6 +53,8 @@ pipeline:
   build-agent:
     when:
       branch: master
+      event: push
+      event: push
     group: build
     image: golang
     environment:
@@ -67,6 +69,7 @@ pipeline:
   build-sweeper:
     when:
       branch: master
+      event: push
     group: build
     image: golang
     environment:
@@ -81,6 +84,7 @@ pipeline:
   build-web:
     when:
       branch: master
+      event: push
     group: build
     image: golang
     environment:
@@ -96,6 +100,7 @@ pipeline:
   docker-agent:
     when:
       branch: master
+      event: push
     group: docker
     image: ruken/docker-go-gcr:latest
     pull: true
@@ -112,6 +117,7 @@ pipeline:
   docker-sweeper:
     when:
       branch: master
+      event: push
     group: docker
     image: ruken/docker-go-gcr:latest
     pull: true
@@ -128,6 +134,7 @@ pipeline:
   docker-web:
     when:
       branch: master
+      event: push
     group: docker
     image: ruken/docker-go-gcr:latest
     pull: true
@@ -145,6 +152,7 @@ pipeline:
     image: ruken/docker-gke-kubectl
     when:
       branch: master
+      event: push
     secrets:
     - source: k8s
       target: K8S_SERVICE_ACCOUNT
@@ -156,6 +164,7 @@ pipeline:
   notify:
     when:
       branch: master
+      event: push
     image: appleboy/drone-telegram
     format: html
     secrets:
