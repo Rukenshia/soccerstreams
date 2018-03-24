@@ -21,6 +21,8 @@ spec:
         resources:
           requests:
             cpu: "0.05"
+        ports:
+        - containerPort: 9000
         volumeMounts:
         - name: graw
           mountPath: "/opt/soccerstreams/graw"

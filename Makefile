@@ -25,6 +25,7 @@ secrets:
 
 deploy:
 	kubectl apply -f k8s/agent.yml
+	kubectl apply -f k8s/agent-service.yml
 	kubectl apply -f k8s/sweeper.yml
 	kubectl apply -f k8s/web.yml
 	kubectl apply -f k8s/web-service.yml
