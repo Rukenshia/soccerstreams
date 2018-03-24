@@ -12,42 +12,49 @@ var (
 	PostsIngested = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "posts_ingested",
 		Namespace: "agent",
+		Help:      "number of reddit posts handled by agent",
 	})
 
 	// PostsParsed represents the number of reddit posts parsed
 	PostsParsed = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "posts_parsed",
 		Namespace: "agent",
+		Help:      "number of reddit posts parsed",
 	})
 
 	// PostsParsedFromComment represents the number of posts parsed from a comment handled
 	PostsParsedFromComment = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "posts_parsed_from_comment",
 		Namespace: "agent",
+		Help:      "number of posts parsed from a comment handled",
 	})
 
-	// PostsDeleted represents the amount of posts that have been deleted after they were parsed
+	// PostsDeleted represents the number of posts that have been deleted after they were parsed
 	PostsDeleted = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "posts_deleted",
 		Namespace: "agent",
+		Help:      "number of posts that have been deleted after they were parsed",
 	})
 
 	// PostsPolling represents the amount of posts being polled by agent at the moment
 	PostsPolling = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name:      "posts_polling",
 		Namespace: "agent",
+		Help:      "amount of posts being polled by agent at the moment",
 	})
 
-	// CommentsIngested represents the amount of reddit comments handled by the agent
+	// CommentsIngested represents the number of reddit comments handled by the agent
 	CommentsIngested = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "comments_ingested",
 		Namespace: "agent",
+		Help:      "number of reddit comments handled by the agent",
 	})
 
 	// CommentsParsed represents the number of reddit comments parsed
 	CommentsParsed = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "comments_parsed",
 		Namespace: "agent",
+		Help:      "number of reddit comments parsed",
 	})
 
 	// CommentsChanged represents the number of reddit comments that were changed after they were parsed.
@@ -55,12 +62,14 @@ var (
 	CommentsChanged = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "comments_changed",
 		Namespace: "agent",
+		Help:      "number of reddit comments that were changed after they were parsed. might contain the same comment more than once as they can be edited any number of times",
 	})
 
 	// CommentsDeleted represents the number of reddit comments that were deleted after they were parsed
 	CommentsDeleted = prometheus.NewCounter(prometheus.CounterOpts{
 		Name:      "comments_deleted",
 		Namespace: "agent",
+		Help:      "number of reddit comments that were deleted after they were parsed",
 	})
 )
 
