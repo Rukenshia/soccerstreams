@@ -13,8 +13,6 @@ import (
 )
 
 func (s *Agent) Post(p *reddit.Post) error {
-	metrics.PostsIngested.Inc()
-
 	mt := parser.ParsePost(p)
 
 	logger := log.WithField("post_id", p.ID).
@@ -40,7 +38,7 @@ func (s *Agent) Post(p *reddit.Post) error {
 			WithField("team2", mt.Team2).
 			WithField("kickoff", mt.Kickoff.Format("15:04"))
 
-		metrics.PostsParsed.Inc()
+		metrics.PostsIngested.WithLabelValues("successful").Inc()
 
 		if err := mt.Save(); err != nil {
 			raven.CaptureError(err, map[string]string{
@@ -56,6 +54,7 @@ func (s *Agent) Post(p *reddit.Post) error {
 		return nil
 	}
 
+	metrics.PostsIngested.WithLabelValues("failed").Inc()
 	logger.Debugf("could not parse post")
 
 	raven.Capture(

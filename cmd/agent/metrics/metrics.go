@@ -9,25 +9,11 @@ import (
 
 var (
 	// PostsIngested represents the number of reddit posts handled by the agent
-	PostsIngested = prometheus.NewCounter(prometheus.CounterOpts{
+	PostsIngested = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name:      "posts_ingested",
 		Namespace: "agent",
 		Help:      "number of reddit posts handled by agent",
-	})
-
-	// PostsParsed represents the number of reddit posts parsed
-	PostsParsed = prometheus.NewCounter(prometheus.CounterOpts{
-		Name:      "posts_parsed",
-		Namespace: "agent",
-		Help:      "number of reddit posts parsed",
-	})
-
-	// PostsParsedFromComment represents the number of posts parsed from a comment handled
-	PostsParsedFromComment = prometheus.NewCounter(prometheus.CounterOpts{
-		Name:      "posts_parsed_from_comment",
-		Namespace: "agent",
-		Help:      "number of posts parsed from a comment handled",
-	})
+	}, []string{"parsing"})
 
 	// PostsDeleted represents the number of posts that have been deleted after they were parsed
 	PostsDeleted = prometheus.NewCounter(prometheus.CounterOpts{
@@ -44,18 +30,11 @@ var (
 	})
 
 	// CommentsIngested represents the number of reddit comments handled by the agent
-	CommentsIngested = prometheus.NewCounter(prometheus.CounterOpts{
+	CommentsIngested = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name:      "comments_ingested",
 		Namespace: "agent",
 		Help:      "number of reddit comments handled by the agent",
-	})
-
-	// CommentsParsed represents the number of reddit comments parsed
-	CommentsParsed = prometheus.NewCounter(prometheus.CounterOpts{
-		Name:      "comments_parsed",
-		Namespace: "agent",
-		Help:      "number of reddit comments parsed",
-	})
+	}, []string{"parsing"})
 
 	// CommentsChanged represents the number of reddit comments that were changed after they were parsed.
 	// This might contain the same comment more than once as they can be edited any number of times
@@ -76,12 +55,9 @@ var (
 // Register registers all metrics
 func Register() {
 	prometheus.MustRegister(PostsIngested)
-	prometheus.MustRegister(PostsParsed)
-	prometheus.MustRegister(PostsParsedFromComment)
 	prometheus.MustRegister(PostsDeleted)
 	prometheus.MustRegister(PostsPolling)
 	prometheus.MustRegister(CommentsIngested)
-	prometheus.MustRegister(CommentsParsed)
 	prometheus.MustRegister(CommentsChanged)
 	prometheus.MustRegister(CommentsDeleted)
 }

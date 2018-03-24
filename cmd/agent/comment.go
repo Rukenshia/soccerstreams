@@ -19,10 +19,9 @@ import (
 
 // Comment parses a new reddit comment
 func (s *Agent) Comment(p *reddit.Comment) error {
-	metrics.CommentsIngested.Inc()
-
 	// We only care about top level comments
 	if !p.IsTopLevel() {
+		metrics.CommentsIngested.WithLabelValues("ignored").Inc()
 		return nil
 	}
 
@@ -56,7 +55,7 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 
 	streams := parser.ParseComment(p.Body)
 	if len(streams) > 0 {
-		metrics.CommentsParsed.Inc()
+		metrics.CommentsIngested.WithLabelValues("successful").Inc()
 
 		// Find the matchthread in datastore
 		// We are not making this in a goroutine because there might be other
@@ -83,6 +82,7 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 			}
 			mt = parser.ParsePost(post)
 			if mt == nil {
+				metrics.PostsIngested.WithLabelValues("via_comment").Inc()
 				logger.Errorf("Unable to parse matchthread from comment")
 				raven.Capture(
 					logging.CreatePacket(raven.DEBUG, "Unable to parse matchthread from comment\nPermalink: https://reddit.com%s\nTitle: %s\nFlair: %s", post.Permalink, post.Title, post.LinkFlairText),
@@ -127,6 +127,7 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 		return nil
 	}
 
+	metrics.CommentsIngested.WithLabelValues("failed").Inc()
 	logger.Debugf("parsing of comment was not successful")
 
 	raven.Capture(
