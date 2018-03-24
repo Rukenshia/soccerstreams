@@ -52,7 +52,7 @@
         {{range .Comments}}
         {{if gt (len .Acestreams) 0}}
         <div class="column is-mobile is-one-third-desktop is-half-tablet">
-        {{template "App/ace_comment.html" .}}
+            {{template "App/comment.html" . | overrideStreams .Acestreams}}
         </div>
         {{end}}
         {{end}}
@@ -63,10 +63,7 @@
         {{range .Comments}}
         {{if gt (len .Webstreams) 0}}
         <div class="column is-mobile is-one-third-desktop is-half-tablet">
-        {{template "App/web_comment.html" .}}
-        </div>
-        <div class="column is-mobile is-one-third-desktop is-half-tablet">
-        {{template "App/web_comment.html" .}}
+        {{template "App/comment.html" . | overrideStreams .Webstreams}}
         </div>
         {{end}}
         {{end}}

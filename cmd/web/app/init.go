@@ -9,6 +9,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/Rukenshia/soccerstreams/cmd/web/app/models"
+
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
+
 	"github.com/revel/log15"
 	"github.com/revel/revel/logger"
 
@@ -132,6 +136,17 @@ func init() {
 	}
 	revel.TemplateFuncs["randomNumber"] = func(from, to int) int {
 		return from + rand.Intn(to-from)
+	}
+
+	type CommentStreams struct {
+		*models.FrontendComment
+		Streams []*soccerstreams.Stream
+	}
+	revel.TemplateFuncs["overrideStreams"] = func(streams []*soccerstreams.Stream, comment *models.FrontendComment) CommentStreams {
+		return CommentStreams{
+			FrontendComment: comment,
+			Streams:         streams,
+		}
 	}
 
 	logger.LogFunctionMap["sentry"] = func(c *logger.CompositeMultiHandler, options *logger.LogOptions) {

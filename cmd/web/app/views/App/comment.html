@@ -1,7 +1,7 @@
 <div class="card">
     <header class="card-header">
       <p class="card-header-title">
-        {{len .Acestreams}} stream{{if gt (len .Streams) 1}}s{{end}} by /u/{{.Streamer}}
+        {{len .Streams}} stream{{if gt (len .Streams) 1}}s{{end}} by /u/{{.Streamer}}
       </p>
       <span class="card-header-icon" style="cursor: inherit">
         <span class="icon">
@@ -16,14 +16,11 @@
     <div class="card-content">
       <div class="content">
         <ul>
-        {{range .Acestreams}}
-        <li>
-          {{if eq .Quality "HD"}}<strong>{{end}}
-          {{.Quality}}
-          {{if eq .Quality "HD"}}</strong>{{end}}
-          stream (Channel: {{.Channel}})
+          {{range .Streams}}
+          <li>
+            {{template "App/stream.html" .}}
+          </li>
           {{end}}
-        </li>
         </ul>
       </div>
     </div>

@@ -80,10 +80,10 @@ func (c App) Index() revel.Result {
 
 			threads = append(threads, fc)
 
-			go cache.Set(fmt.Sprintf("matchthread_%s", fc.DBKey()), fc, 10*time.Minute)
+			go cache.Set(fmt.Sprintf("matchthread_%s", fc.DBKey()), fc, 30*time.Second)
 		}
 
-		go cache.Set("matchthreads", threads, 1*time.Second)
+		go cache.Set("matchthreads", threads, 30*time.Second)
 	}
 
 	moreStyles := []string{"css/soc.css"}
@@ -99,8 +99,8 @@ func (c App) Details() revel.Result {
 	cacheKey := fmt.Sprintf("matchthread_%s", c.Params.Route.Get("thread"))
 
 	if err := cache.Get(cacheKey, &thread); err != nil {
-		var backendThread *soccerstreams.Matchthread
-		if err := app.DB.Get(app.DBCtx, datastore.NameKey("matchthread", c.Params.Route.Get("thread"), nil), backendThread); err != nil {
+		var backendThread soccerstreams.Matchthread
+		if err := app.DB.Get(app.DBCtx, datastore.NameKey("matchthread", c.Params.Route.Get("thread"), nil), &backendThread); err != nil {
 			return c.handleDbError(err, revel.NewErrorFromPanic(err))
 		}
 
@@ -110,13 +110,13 @@ func (c App) Details() revel.Result {
 		}
 
 		thread = &models.FrontendMatchthread{
-			Matchthread: backendThread,
+			Matchthread: &backendThread,
 			Comments:    comments,
 		}
 
 		processThread(thread)
 
-		go cache.Set(cacheKey, thread, 2*time.Minute)
+		go cache.Set(cacheKey, thread, 30*time.Second)
 	}
 
 	c.Log.Debugf("%v", thread)
