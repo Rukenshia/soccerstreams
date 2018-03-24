@@ -1,9 +1,47 @@
 package models
 
-import "github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
+import (
+	"sort"
+	"strings"
+
+	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
+)
+
+// FrontendComment represents a enhanced Comment for the views
+type FrontendComment struct {
+	*soccerstreams.Comment
+
+	Acestreams []*soccerstreams.Stream
+	Webstreams []*soccerstreams.Stream
+}
+
+// NewFrontendComment creates a FrontendComment and fills the struct with additional data for the views
+func NewFrontendComment(c *soccerstreams.Comment) *FrontendComment {
+	var ace []*soccerstreams.Stream
+	var web []*soccerstreams.Stream
+
+	for _, s := range c.Streams {
+		if strings.Contains(s.Link, "acestream://") {
+			ace = append(ace, s)
+
+			continue
+		}
+
+		web = append(web, s)
+	}
+
+	sort.Sort(ByQuality(ace))
+	sort.Sort(ByQuality(web))
+
+	return &FrontendComment{
+		Comment:    c,
+		Acestreams: ace,
+		Webstreams: web,
+	}
+}
 
 // ByCommentRelevance combines ByUpvotes and StreamerOfTheWeek sorts
-type ByCommentRelevance []*soccerstreams.Comment
+type ByCommentRelevance []*FrontendComment
 
 func (b ByCommentRelevance) Len() int { return len(b) }
 
@@ -21,7 +59,7 @@ func (b ByCommentRelevance) Less(i, j int) bool {
 func (b ByCommentRelevance) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
 
 // ByUpvotes sorts the Comments by number of Upvotes
-type ByUpvotes []*soccerstreams.Comment
+type ByUpvotes []*FrontendComment
 
 func (b ByUpvotes) Len() int { return len(b) }
 func (b ByUpvotes) Less(i, j int) bool {

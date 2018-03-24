@@ -11,13 +11,14 @@ import (
 type FrontendMatchthread struct {
 	*soccerstreams.Matchthread
 
-	GMTKickoff    string
-	IsLive        bool
+	Comments []*FrontendComment
+
+	GMTKickoff string
+	IsLive     bool
+
+	NumStreams    int
 	NumAcestreams int
 	NumWebstreams int
-	NumStreams    int
-	Webstreams    []*soccerstreams.Stream
-	Acestreams    []*soccerstreams.Stream
 }
 
 // FrontendMatchthreads represents a slice of FrontendMatchthread
