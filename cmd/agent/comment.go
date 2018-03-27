@@ -111,8 +111,10 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 
 		if added := mt.AddComment(comment); !added {
 			// Not adding duplicated comment
+			logger.Debugf("Did not add comment")
 			return nil
 		}
+		logger.WithField("streams", len(streams)).WithField("streams_in_comment", len(comment.Streams)).Debugf("Save streams")
 
 		if err := mt.Save(); err != nil {
 			logger.Errorf("Could not update Matchthread: %v", err)
