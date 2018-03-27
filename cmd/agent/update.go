@@ -147,7 +147,6 @@ func (s *Agent) HandleUpdate(postID string, post *reddit.Post) (bool, error) {
 
 		existing.Streams = parser.ParseComment(c.Body)
 		FillCommentInfo(existing, c)
-		existing.Body = c.Body
 		existing.UpdateHash()
 
 		comments = append(comments, existing)
