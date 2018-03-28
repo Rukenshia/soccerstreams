@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/Rukenshia/soccerstreams/cmd/web/app/models"
+	"github.com/Rukenshia/soccerstreams/cmd/web/metrics"
+	"github.com/prometheus/common/log"
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
@@ -89,6 +91,11 @@ func (s *sentryHandler) getCtxFromArray(ctx []interface{}) (map[string]string, e
 func init() {
 	raven.SetDSN(os.Getenv("SENTRY_DSN"))
 
+	go func() {
+		metrics.Register()
+		log.Fatal(metrics.Serve())
+	}()
+
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{
 		func(c *revel.Controller, fc []revel.Filter) {
@@ -117,7 +124,11 @@ func init() {
 		HeaderFilter,                  // Add some security based headers
 		revel.InterceptorFilter,       // Run interceptors around the action.
 		revel.CompressFilter,          // Compress the result.
-		revel.ActionInvoker,           // Invoke the action.
+		func(c *revel.Controller, fc []revel.Filter) {
+			fc[0](c, fc[1:])
+			metrics.HTTPRequests.WithLabelValues(fmt.Sprintf("%d", c.Response.Status)).Inc()
+		},
+		revel.ActionInvoker, // Invoke the action.
 	}
 
 	// Add custom template functions

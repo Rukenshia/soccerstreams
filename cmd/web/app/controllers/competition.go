@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/Rukenshia/soccerstreams/cmd/web/metrics"
 	"github.com/revel/revel"
 )
 
@@ -35,6 +36,7 @@ func (c Competition) Image() revel.Result {
 
 	if filename == "" {
 		filename = filepath.Join(revel.AppPath[:len(revel.AppPath)-4], "assets", "img", "clubs", "placeholder.png")
+		metrics.ImageNotFound.WithLabelValues("club").Inc()
 	}
 
 	return c.RenderFileName(filename, revel.NoDisposition)
