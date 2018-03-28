@@ -58,6 +58,6 @@ func main() {
 			log.Errorf("Could not delete matchthreads: %v", err)
 		}
 
-		metrics.MatchthreadsDeleted.Add(len(threads))
+		metrics.MatchthreadsDeleted.Add(float64(len(threads)))
 	}
 }
