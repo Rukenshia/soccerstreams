@@ -7,6 +7,7 @@ import (
 
 	"cloud.google.com/go/datastore"
 
+	"github.com/Rukenshia/soccerstreams/cmd/sweeper/metrics"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
@@ -25,6 +26,11 @@ func main() {
 		raven.CaptureErrorAndWait(err, nil)
 		log.Fatal(err)
 	}
+
+	go func() {
+		metrics.Register()
+		log.Error(metrics.Serve())
+	}()
 
 	ticker := time.NewTicker(time.Minute)
 
@@ -51,5 +57,7 @@ func main() {
 		if err := client.DeleteMulti(ids); err != nil {
 			log.Errorf("Could not delete matchthreads: %v", err)
 		}
+
+		metrics.MatchthreadsDeleted.Add(len(threads))
 	}
 }

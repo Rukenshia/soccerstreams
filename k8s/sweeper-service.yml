@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: soccerstreams-sweeper-service
+  labels:
+    run: soccerstreams-sweeper-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 9000
+    targetPort: 9000
+    protocol: TCP
+  selector:
+    app: soccerstreams-sweeper
