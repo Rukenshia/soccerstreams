@@ -7,10 +7,12 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 9000
+  - name: metrics
+    port: 9000
     targetPort: 9000
     protocol: TCP
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 8080
     protocol: TCP
   selector:
