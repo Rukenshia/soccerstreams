@@ -92,6 +92,18 @@ func Test_threadParser_Parse(t *testing.T) {
 		{
 			args: args{
 				p: &reddit.Post{
+					Title: "[20.05 GMT] Celtic v Zenit",
+				},
+			},
+			want: &soccerstreams.Matchthread{
+				Team1:   "Celtic",
+				Team2:   "Zenit",
+				Kickoff: &gmt805pm,
+			},
+		},
+		{
+			args: args{
+				p: &reddit.Post{
 					Title: "[20:05 GMT] Celtic v Zenit",
 				},
 			},
