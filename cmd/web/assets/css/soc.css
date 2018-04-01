@@ -125,3 +125,7 @@
 .reliable-streamer {
     width: 18px;
 }
+
+.bad-comment,.bad-comment .card-header-title {
+    opacity: .5;
+}

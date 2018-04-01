@@ -1,4 +1,6 @@
-{{if eq .Quality "HD"}}<strong>{{end}}
+<li>{{if eq .Quality "HD"}}<strong>{{end}}
 {{.Quality}}
 {{if eq .Quality "HD"}}</strong>{{end}}
-stream (Channel: {{.Channel}})
+{{if ne .Channel "Acestream"}}
+ (Channel: {{.Channel}})
+{{end}}</li>
