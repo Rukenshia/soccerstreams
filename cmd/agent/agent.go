@@ -2,11 +2,11 @@ package main
 
 import (
 	"log"
-	"os"
 	"sync"
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
+	logrus "github.com/sirupsen/logrus"
 	"github.com/turnage/graw"
 	"github.com/turnage/graw/reddit"
 )
@@ -24,7 +24,13 @@ func NewAgent(bot reddit.Bot, client soccerstreams.DBClient) *Agent {
 }
 
 func (s *Agent) Run() error {
-	cfg := graw.Config{Subreddits: []string{"soccerstreams"}, SubredditComments: []string{"soccerstreams"}, Logger: log.New(os.Stdout, "graw", 0)}
+	logger := log.New(logrus.StandardLogger().Out, "graw", log.LstdFlags)
+
+	cfg := graw.Config{
+		Subreddits:        []string{"soccerstreams"},
+		SubredditComments: []string{"soccerstreams"},
+		Logger:            logger,
+	}
 
 	_, wait, err := graw.Run(s, s.bot, cfg)
 	if err != nil {
