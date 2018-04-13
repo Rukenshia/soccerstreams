@@ -49,6 +49,7 @@ func (t *ThreadPoller) Poll() chan *reddit.Post {
 			post, err := t.bot.Thread(t.Permalink)
 			metrics.GrawEvents.WithLabelValues("manual_thread").Inc()
 			if err != nil {
+				metrics.GrawEvents.WithLabelValues("manual_thread_error").Inc()
 				log.Warnf("Could not poll thread: %v", err)
 				close(updates)
 				break
