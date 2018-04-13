@@ -19,6 +19,8 @@ import (
 
 // Comment parses a new reddit comment
 func (s *Agent) Comment(p *reddit.Comment) error {
+	metrics.GrawEvents.WithLabelValues("stream_comment").Inc()
+
 	// We only care about top level comments
 	if !p.IsTopLevel() {
 		metrics.CommentsIngested.WithLabelValues("ignored").Inc()

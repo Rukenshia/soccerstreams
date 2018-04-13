@@ -50,6 +50,13 @@ var (
 		Namespace: "agent",
 		Help:      "number of reddit comments that were deleted after they were parsed",
 	})
+
+	// GrawEvents represents any kind of graw interaction being handled
+	GrawEvents = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name:      "graw_events",
+		Namespace: "agent",
+		Help:      "number of graw events",
+	}, []string{"type"})
 )
 
 // Register registers all metrics
@@ -60,6 +67,7 @@ func Register() {
 	prometheus.MustRegister(CommentsIngested)
 	prometheus.MustRegister(CommentsChanged)
 	prometheus.MustRegister(CommentsDeleted)
+	prometheus.MustRegister(GrawEvents)
 }
 
 // Serve serves the metrics endpoint

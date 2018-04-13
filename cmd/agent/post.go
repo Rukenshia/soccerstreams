@@ -13,6 +13,7 @@ import (
 )
 
 func (s *Agent) Post(p *reddit.Post) error {
+	metrics.GrawEvents.WithLabelValues("stream_post").Inc()
 	mt := parser.ParsePost(p)
 
 	logger := log.WithField("post_id", p.ID).

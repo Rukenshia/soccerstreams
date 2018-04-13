@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 	log "github.com/sirupsen/logrus"
 	"github.com/turnage/graw/reddit"
 )
@@ -46,6 +47,7 @@ func (t *ThreadPoller) Poll() chan *reddit.Post {
 			}
 
 			post, err := t.bot.Thread(t.Permalink)
+			metrics.GrawEvents.WithLabelValues("manual_thread").Inc()
 			if err != nil {
 				log.Warnf("Could not poll thread: %v", err)
 				close(updates)
