@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"os"
+	"time"
 
 	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
@@ -22,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	bot, err := reddit.NewBotFromAgentFile("/opt/soccerstreams/graw/graw", 0)
+	bot, err := reddit.NewBotFromAgentFile("/opt/soccerstreams/graw/graw", time.Second*15)
 	if err != nil {
 		log.Fatal(err)
 	}
