@@ -27,7 +27,7 @@ func NewThreadPoller(permalink string, kickoff time.Time, bot reddit.Bot) *Threa
 
 // Poll starts polling the thread for updates.
 func (t *ThreadPoller) Poll() chan *reddit.Post {
-	ticker := time.NewTicker(time.Minute * 2)
+	ticker := time.NewTicker(time.Minute * 5)
 	updates := make(chan *reddit.Post)
 
 	if time.Now().After(t.Kickoff.Add(time.Minute * 60)) {
