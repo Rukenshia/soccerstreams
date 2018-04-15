@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 
@@ -20,6 +21,9 @@ import (
 // Comment parses a new reddit comment
 func (s *Agent) Comment(p *reddit.Comment) error {
 	metrics.GrawEvents.WithLabelValues("stream_comment").Inc()
+
+	timeCreated := time.Unix(int64(p.CreatedUTC), 0)
+	metrics.GrawEventDiff.Observe(float64(time.Now().Sub(timeCreated) / time.Second))
 
 	// We only care about top level comments
 	if !p.IsTopLevel() {

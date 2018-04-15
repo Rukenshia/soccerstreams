@@ -8,6 +8,15 @@ import (
 )
 
 var (
+	// GrawEventDiff records the time difference between an event happening and being handled by agent
+	GrawEventDiff = prometheus.NewHistogram(prometheus.HistogramOpts{
+		Name:      "graw_event_diff",
+		Namespace: "agent",
+		Help:      "difference in event occuring vs being handled by agent (seconds)",
+
+		Buckets: []float64{20, 90},
+	})
+
 	// PostsIngested represents the number of reddit posts handled by the agent
 	PostsIngested = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name:      "posts_ingested",
@@ -61,6 +70,7 @@ var (
 
 // Register registers all metrics
 func Register() {
+	prometheus.MustRegister(GrawEventDiff)
 	prometheus.MustRegister(PostsIngested)
 	prometheus.MustRegister(PostsDeleted)
 	prometheus.MustRegister(PostsPolling)

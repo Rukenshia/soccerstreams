@@ -2,6 +2,7 @@ package main
 
 import (
 	"sync"
+	"time"
 
 	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 
@@ -14,6 +15,10 @@ import (
 
 func (s *Agent) Post(p *reddit.Post) error {
 	metrics.GrawEvents.WithLabelValues("stream_post").Inc()
+
+	timeCreated := time.Unix(int64(p.CreatedUTC), 0)
+	metrics.GrawEventDiff.Observe(float64(time.Now().Sub(timeCreated) / time.Second))
+
 	mt := parser.ParsePost(p)
 
 	logger := log.WithField("post_id", p.ID).
