@@ -13,8 +13,6 @@ import (
 	"github.com/Rukenshia/soccerstreams/cmd/web/metrics"
 	"github.com/prometheus/common/log"
 
-	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
-
 	"github.com/revel/log15"
 	"github.com/revel/revel/logger"
 
@@ -151,9 +149,9 @@ func init() {
 
 	type CommentStreams struct {
 		*models.FrontendComment
-		Streams []*soccerstreams.Stream
+		Streams []*models.FrontendStream
 	}
-	revel.TemplateFuncs["overrideStreams"] = func(streams []*soccerstreams.Stream, comment *models.FrontendComment) CommentStreams {
+	revel.TemplateFuncs["overrideStreams"] = func(streams []*models.FrontendStream, comment *models.FrontendComment) CommentStreams {
 		return CommentStreams{
 			FrontendComment: comment,
 			Streams:         streams,

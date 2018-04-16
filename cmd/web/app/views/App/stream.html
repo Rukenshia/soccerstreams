@@ -1,6 +1,17 @@
-<li>{{if eq .Quality "HD"}}<strong>{{end}}
-{{.Quality}}
-{{if eq .Quality "HD"}}</strong>{{end}}
-{{if ne .Channel "Acestream"}}
- (Channel: {{.Channel}})
-{{end}}</li>
+{{if .Displayable}}
+<li>
+{{if ne .Quality ""}}
+	{{if eq .Quality "HD"}}<strong>{{end}}
+	{{.Quality}}
+	{{if eq .Quality "HD"}}</strong>{{end}}
+	{{if ne .Channel "Acestream"}}
+	 (Channel: {{.Channel}})
+	{{end}}</li>
+{{else}}
+{{if ne .Channel ""}}
+	{{.Channel}}
+{{else}}
+dbg_not_displayable CHAN<{{.Channel}}> Q<{{.Quality}}>
+{{end}}
+{{end}}
+{{end}}

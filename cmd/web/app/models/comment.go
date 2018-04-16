@@ -11,23 +11,23 @@ import (
 type FrontendComment struct {
 	*soccerstreams.Comment
 
-	Acestreams []*soccerstreams.Stream
-	Webstreams []*soccerstreams.Stream
+	Acestreams []*FrontendStream
+	Webstreams []*FrontendStream
 }
 
 // NewFrontendComment creates a FrontendComment and fills the struct with additional data for the views
 func NewFrontendComment(c *soccerstreams.Comment) *FrontendComment {
-	var ace []*soccerstreams.Stream
-	var web []*soccerstreams.Stream
+	var ace []*FrontendStream
+	var web []*FrontendStream
 
 	for _, s := range c.Streams {
 		if strings.Contains(s.Link, "acestream://") {
-			ace = append(ace, s)
+			ace = append(ace, &FrontendStream{s})
 
 			continue
 		}
 
-		web = append(web, s)
+		web = append(web, &FrontendStream{s})
 	}
 
 	sort.Sort(ByQuality(ace))
@@ -66,3 +66,13 @@ func (b ByUpvotes) Less(i, j int) bool {
 	return b[i].Upvotes > b[j].Upvotes
 }
 func (b ByUpvotes) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+
+// Displayable returns whether any of the streams of this comment can be displayed
+func (c *FrontendComment) Displayable() bool {
+	for _, s := range c.Streams {
+		if (&FrontendStream{s}).Displayable() {
+			return true
+		}
+	}
+	return false
+}

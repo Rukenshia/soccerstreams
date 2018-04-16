@@ -50,10 +50,12 @@
         <p class="title is-2">Acestreams</p>
         <div class="columns is-multiline">
         {{range .Comments}}
+	{{if .Displayable}}
         {{if gt (len .Acestreams) 0}}
         <div class="column is-mobile is-one-third-desktop is-half-tablet">
             {{template "App/comment.html" . | overrideStreams .Acestreams}}
         </div>
+	{{end}}
         {{end}}
         {{end}}
         </div>
@@ -61,11 +63,13 @@
         <p class="title is-2">Webstreams</p>
         <div class="columns is-multiline">
         {{range .Comments}}
+	{{if .Displayable}}
         {{if gt (len .Webstreams) 0}}
         <div class="column is-mobile is-one-third-desktop is-half-tablet">
         {{template "App/comment.html" . | overrideStreams .Webstreams}}
         </div>
         {{end}}
+	{{end}}
         {{end}}
         </div>
       </div>
