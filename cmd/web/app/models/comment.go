@@ -54,7 +54,7 @@ func (b ByCommentRelevance) Less(i, j int) bool {
 		}
 		return true
 	}
-	return ByUpvotes(b).Less(i, j)
+	return ByUpvotes(b).Less(i, j) && !b[j].ReliableStreamer
 }
 func (b ByCommentRelevance) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
 
