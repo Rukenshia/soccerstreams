@@ -65,6 +65,7 @@ func (a *acestreamParser) parseLine(line string) *soccerstreams.Stream {
 				"quality":       s.Quality,
 				"matchedString": matchedString,
 				"rest":          rest,
+				"line":          line,
 			})
 		} else if len(candidates) == 1 {
 			s.Channel = candidates[0]
