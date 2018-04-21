@@ -6,9 +6,9 @@ import (
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
+	"github.com/Rukenshia/graw/reddit"
 	mockdb "github.com/Rukenshia/soccerstreams/pkg/soccerstreams/testing"
 	"github.com/stretchr/testify/assert"
-	"github.com/turnage/graw/reddit"
 )
 
 func TestCommentSingleWebstream(t *testing.T) {

@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
-	"github.com/turnage/graw/reddit"
 )
 
 func Test_threadParser_Parse(t *testing.T) {

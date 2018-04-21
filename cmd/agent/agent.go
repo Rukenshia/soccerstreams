@@ -6,9 +6,9 @@ import (
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
+	"github.com/Rukenshia/graw"
+	"github.com/Rukenshia/graw/reddit"
 	logrus "github.com/sirupsen/logrus"
-	"github.com/turnage/graw"
-	"github.com/turnage/graw/reddit"
 )
 
 type Agent struct {

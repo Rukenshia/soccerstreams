@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	log "github.com/sirupsen/logrus"
-	"github.com/turnage/graw/reddit"
 )
 
 type threadParser struct {

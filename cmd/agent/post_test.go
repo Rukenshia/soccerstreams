@@ -3,9 +3,9 @@ package main
 import (
 	"testing"
 
+	"github.com/Rukenshia/graw/reddit"
 	mockdb "github.com/Rukenshia/soccerstreams/pkg/soccerstreams/testing"
 	"github.com/stretchr/testify/assert"
-	"github.com/turnage/graw/reddit"
 )
 
 type TestBot struct{}

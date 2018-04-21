@@ -3,9 +3,9 @@ package main
 import (
 	"time"
 
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 	log "github.com/sirupsen/logrus"
-	"github.com/turnage/graw/reddit"
 )
 
 // ThreadPoller represents a Matchthread that is being checked for updates

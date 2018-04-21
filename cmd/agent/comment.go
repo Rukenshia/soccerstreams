@@ -10,10 +10,10 @@ import (
 
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
 	"github.com/Rukenshia/soccerstreams/pkg/parser"
 	raven "github.com/getsentry/raven-go"
-	"github.com/turnage/graw/reddit"
 
 	log "github.com/sirupsen/logrus"
 )

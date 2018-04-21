@@ -5,11 +5,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
-	"github.com/turnage/graw/reddit"
 )
 
 func init() {

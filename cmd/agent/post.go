@@ -6,11 +6,11 @@ import (
 
 	"github.com/Rukenshia/soccerstreams/cmd/agent/metrics"
 
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/pkg/monitoring"
 	"github.com/Rukenshia/soccerstreams/pkg/parser"
 	raven "github.com/getsentry/raven-go"
 	log "github.com/sirupsen/logrus"
-	"github.com/turnage/graw/reddit"
 )
 
 func (s *Agent) Post(p *reddit.Post) error {

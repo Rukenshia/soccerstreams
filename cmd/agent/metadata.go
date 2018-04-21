@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
-	"github.com/turnage/graw/reddit"
 )
 
 // FillMatchthreadInfo adds metadata to a matchthread from a reddit post

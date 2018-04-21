@@ -1,8 +1,8 @@
 package parser
 
 import (
+	"github.com/Rukenshia/graw/reddit"
 	"github.com/Rukenshia/soccerstreams/pkg/soccerstreams"
-	"github.com/turnage/graw/reddit"
 )
 
 type CommentParser interface {
