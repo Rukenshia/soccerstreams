@@ -30,4 +30,4 @@ deploy:
 	kubectl apply -f k8s/sweeper-service.yml
 	kubectl apply -f k8s/web.yml
 	kubectl apply -f k8s/web-service.yml
-.PHONY: secrets
+.PHONY: secrets deploy
