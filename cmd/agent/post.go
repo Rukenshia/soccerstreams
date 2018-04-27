@@ -23,7 +23,9 @@ func (s *Agent) Post(p *reddit.Post) error {
 
 	logger := log.WithField("post_id", p.ID).
 		WithField("author", p.Author).
-		WithField("title", p.Title)
+		WithField("title", p.Title).
+		WithField("component", "agent")
+	logger.Debugf("handling post")
 
 	if _, ok := s.guard[p.ID]; !ok {
 		s.guard[p.ID] = &sync.Mutex{}

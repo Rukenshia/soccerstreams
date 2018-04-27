@@ -25,15 +25,18 @@ func (s *Agent) Comment(p *reddit.Comment) error {
 	timeCreated := time.Unix(int64(p.CreatedUTC), 0)
 	metrics.GrawEventDiff.Observe(float64(time.Now().Sub(timeCreated) / time.Second))
 
+	logger := log.WithField("comment_id", p.ID).
+		WithField("post_id", p.ParentID).
+		WithField("author", p.Author).
+		WithField("component", "agent")
+
+	logger.Debugf("handling comment")
+
 	// We only care about top level comments
 	if !p.IsTopLevel() {
 		metrics.CommentsIngested.WithLabelValues("ignored").Inc()
 		return nil
 	}
-
-	logger := log.WithField("comment_id", p.ID).
-		WithField("post_id", p.ParentID).
-		WithField("author", p.Author)
 
 	if _, ok := s.guard[p.ParentID]; !ok {
 		s.guard[p.ParentID] = &sync.Mutex{}

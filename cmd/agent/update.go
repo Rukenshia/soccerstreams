@@ -15,61 +15,62 @@ import (
 
 // StartPolling starts polling a Matchthread for updates. If we are already polling a Matchthread, no action will be taken.
 func (s *Agent) StartPolling(mt *soccerstreams.Matchthread) {
+	return
 
-	logger := log.WithField("post_id", mt.RedditID).
-		WithField("polling", true)
+	//logger := log.WithField("post_id", mt.RedditID).
+	//WithField("polling", true)
 
-	for _, p := range s.polling {
-		if p == mt.RedditID {
-			// We are already polling this thread; no further action required
-			return
-		}
-	}
+	//for _, p := range s.polling {
+	//if p == mt.RedditID {
+	//// We are already polling this thread; no further action required
+	//return
+	//}
+	//}
 
-	metrics.PostsPolling.Inc()
+	//metrics.PostsPolling.Inc()
 
-	go func() {
-		defer func() {
-			// Delete entry from polling array
-			for idx, p := range s.polling {
-				if p == mt.RedditID {
-					s.polling = append(s.polling[:idx], s.polling[idx+1:]...)
-					break
-				}
-			}
+	//go func() {
+	//defer func() {
+	//// Delete entry from polling array
+	//for idx, p := range s.polling {
+	//if p == mt.RedditID {
+	//s.polling = append(s.polling[:idx], s.polling[idx+1:]...)
+	//break
+	//}
+	//}
 
-			metrics.PostsPolling.Dec()
-		}()
+	//metrics.PostsPolling.Dec()
+	//}()
 
-		poller := NewThreadPoller(fmt.Sprintf("/r/soccerstreams/comments/%s", mt.RedditID), *mt.Kickoff, s.bot)
+	//poller := NewThreadPoller(fmt.Sprintf("/r/soccerstreams/comments/%s", mt.RedditID), *mt.Kickoff, s.bot)
 
-		s.polling = append(s.polling, mt.RedditID)
+	//s.polling = append(s.polling, mt.RedditID)
 
-		pollChannel := poller.Poll()
-		for {
-			update, ok := <-pollChannel
-			if !ok {
-				logger.Debugf("Poll thread reached EOL")
-				break
-			}
+	//pollChannel := poller.Poll()
+	//for {
+	//update, ok := <-pollChannel
+	//if !ok {
+	//logger.Debugf("Poll thread reached EOL")
+	//break
+	//}
 
-			keepOpen, err := s.HandleUpdate(mt.RedditID, update)
-			if err != nil {
-				logger.Warnf("Error while handling update: %v", err)
-				if !keepOpen {
-					logger.Warnf("-> Stop handling updates")
-					close(pollChannel)
-					break
-				}
-			}
+	//keepOpen, err := s.HandleUpdate(mt.RedditID, update)
+	//if err != nil {
+	//logger.Warnf("Error while handling update: %v", err)
+	//if !keepOpen {
+	//logger.Warnf("-> Stop handling updates")
+	//close(pollChannel)
+	//break
+	//}
+	//}
 
-			if !keepOpen {
-				logger.Debugf("Stopping update polling, keepOpen is false. No error")
-				close(pollChannel)
-				break
-			}
-		}
-	}()
+	//if !keepOpen {
+	//logger.Debugf("Stopping update polling, keepOpen is false. No error")
+	//close(pollChannel)
+	//break
+	//}
+	//}
+	//}()
 }
 
 // HandleUpdate handles polling updates for Matchthreads
