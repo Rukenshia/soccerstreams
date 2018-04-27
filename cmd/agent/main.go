@@ -14,6 +14,7 @@ import (
 
 func init() {
 	log.SetLevel(log.DebugLevel)
+	log.SetFormatter(&log.JSONFormatter{})
 	raven.SetDSN(os.Getenv("SENTRY_DSN"))
 }
 
