@@ -1,0 +1,45 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: soccerstreams-agent-py-deployment
+  labels:
+    app: soccerstreams-agent-py
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: soccerstreams-agent-py
+  template:
+    metadata:
+      labels:
+        app: soccerstreams-agent-py
+    spec:
+      containers:
+      - name: soccerstreams-agent-py
+        image: gcr.io/soccerstreams-web/agent-py:0.1.1
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: "0.01"
+        ports:
+        - containerPort: 9000
+        env:
+          - name: REDDIT_CLIENT_ID
+            value: "RXMJXsLlL8m2oA"
+          - name: REDDIT_USER_AGENT
+            value: "k8s:RXMJXsLlL8m2oA:0.1.0 (by /u/rukenshia)"
+          - name: REDDIT_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: agent-py
+                key: REDDIT_CLIENT_SECRET
+          - name: REDDIT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: agent-py
+                key: REDDIT_USERNAME
+          - name: REDDIT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: agent-py
+                key: REDDIT_PASSWORD
