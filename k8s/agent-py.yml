@@ -14,16 +14,27 @@ spec:
       labels:
         app: soccerstreams-agent-py
     spec:
+      volumes:
+      - name: gcloud
+        secret:
+          secretName: gcloud-service-account
       containers:
       - name: soccerstreams-agent-py
-        image: gcr.io/soccerstreams-web/agent-py:0.1.1
+        image: gcr.io/soccerstreams-web/agent-py:0.3.9
         imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: "0.01"
         ports:
         - containerPort: 9000
+        volumeMounts:
+        - name: gcloud
+          mountPath: "/opt/soccerstreams/gcloud"
         env:
+          - name: AGENT_TYPE
+            value: comment
+          - name: BUCKET_NAME
+            value: soccerstreams-comments
           - name: REDDIT_CLIENT_ID
             value: "RXMJXsLlL8m2oA"
           - name: REDDIT_USER_AGENT
@@ -43,3 +54,8 @@ spec:
               secretKeyRef:
                 name: agent-py
                 key: REDDIT_PASSWORD
+          - name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq
+                key: password

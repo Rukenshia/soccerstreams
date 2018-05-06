@@ -1,0 +1,14 @@
+imports:
+  - path: bucket.jinja
+
+resources:
+- name: posts
+  type: bucket.jinja
+  properties:
+    name: soccerstreams-posts
+    datatype: posts
+- name: comments
+  type: bucket.jinja
+  properties:
+    name: soccerstreams-comments
+    datatype: posts

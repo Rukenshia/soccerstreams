@@ -1,0 +1,16 @@
+resources:
+- name: {{ properties['name'] }}
+  type: storage.v1.bucket
+  properties:
+    name: {{ properties['name'] }}
+    location: europe-west1
+    lifecycle:
+      rule:
+      - action:
+          type: Delete
+        condition:
+          age: 30
+          isLive: true
+    labels:
+      datatype: {{ properties['datatype'] }}
+    storageClass: REGIONAL

@@ -1,3 +1,5 @@
 praw
 prometheus_client
 python_dotenv
+pika
+google-cloud-storage
